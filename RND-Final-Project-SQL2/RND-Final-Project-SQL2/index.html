@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dokumen RND — Final Project Pemrograman SQL II</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<!-- ============ PROGRESS BAR ============ -->
+<div class="progress-wrap no-print">
+  <span class="progress-label">Kelengkapan</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="progress-pct" id="progressPct">0%</span>
+  <span class="storage-meter" id="storageMeter" title="Pemakaian penyimpanan browser">DB: --</span>
+</div>
+
+<div class="doc-wrapper" id="rndDocument">
+
+  <!-- ============ COVER / KOP ============ -->
+  <div class="cover">
+    <div class="kop">
+      <img src="assets/logo-polinela.png" alt="Logo Politeknik Negeri Lampung">
+      <div class="kop-text">
+        <p class="inst">Politeknik Negeri Lampung</p>
+        <p class="unit">Jurusan Teknologi Informasi &middot; Program Studi Manajemen Informatika</p>
+        <p class="addr">Jl. Soekarno-Hatta No.10, Rajabasa, Bandar Lampung</p>
+      </div>
+      <img src="assets/logo-sdgs.jpg" alt="Logo SDGs">
+    </div>
+
+    <div class="cover-title">
+      <div class="eyebrow">Dokumen Research and Development</div>
+      <h1>Laporan Final Project<br>Pemrograman SQL II</h1>
+      <div class="ruled"></div>
+      <p class="sub">Perancangan dan implementasi aplikasi berbasis database relasional, mencakup analisis kebutuhan, perancangan basis data, implementasi, pengujian, dan deployment.</p>
+    </div>
+
+    <div class="cover-grid">
+      <div class="cover-field"><label>Judul Proyek</label><input data-required data-label="Judul Proyek" id="judulProyek" placeholder="Judul aplikasi / studi kasus"></div>
+      <div class="cover-field"><label>Nama</label><input data-required data-label="Nama Mahasiswa" id="namaMahasiswa" placeholder="Nama lengkap"></div>
+      <div class="cover-field"><label>NIM</label><input data-required data-label="NIM" id="nim" placeholder="Nomor Induk Mahasiswa"></div>
+      <div class="cover-field"><label>Prodi / Kelas</label><input data-required data-label="Program Studi / Kelas" id="kelasSemester" placeholder="Manajemen Informatika"></div>
+      <div class="cover-field"><label>Dosen</label><input id="dosenPengampu" placeholder="Dosen pengampu"></div>
+      <div class="cover-field"><label>Institusi</label><input id="institusi" value="Politeknik Negeri Lampung"></div>
+      <div class="cover-field"><label>Tgl Mulai</label><input type="date" id="tglMulai"></div>
+      <div class="cover-field"><label>Tgl Selesai</label><input type="date" id="tglSelesai"></div>
+    </div>
+  </div>
+
+  <!-- ============ DAFTAR ISI ============ -->
+  <div class="toc">
+    <h3>Daftar Isi</h3>
+    <ol id="tocList"></ol>
+  </div>
+
+  <!-- ============ BAB I ============ -->
+  <div class="section" id="bab1" data-toc="Pendahuluan dan Analisis Kebutuhan">
+    <div class="section-head"><span class="num">BAB I</span><h2>Pendahuluan dan Analisis Kebutuhan</h2></div>
+    <div class="section-body">
+      <div class="sub-title"><span class="tag">1.1</span><span class="txt">Latar Belakang</span></div>
+      <textarea data-required data-label="1.1 Latar Belakang" class="input serif-input mb" rows="4" id="latarBelakang" placeholder="Jelaskan masalah yang melatarbelakangi pembuatan aplikasi..."></textarea>
+
+      <div class="sub-title"><span class="tag">1.2</span><span class="txt">Rumusan Masalah</span></div>
+      <textarea data-required data-label="1.2 Rumusan Masalah" class="input serif-input mb" rows="3" id="rumusanMasalah" placeholder="1. Bagaimana...&#10;2. Bagaimana..."></textarea>
+
+      <div class="sub-title"><span class="tag">1.3</span><span class="txt">Tujuan Proyek</span></div>
+      <textarea data-required data-label="1.3 Tujuan Proyek" class="input serif-input mb" rows="3" id="tujuanProyek" placeholder="1. Membangun...&#10;2. Merancang database relasional...&#10;3. ..."></textarea>
+
+      <div class="grid g-2">
+        <div><label class="fld">1.4 Ruang Lingkup — Dikerjakan</label><textarea class="input serif-input" rows="3" id="lingkupDikerjakan" placeholder="Fitur yang dikerjakan"></textarea></div>
+        <div><label class="fld">1.5 Batasan — Tidak Dikerjakan</label><textarea class="input serif-input" rows="3" id="lingkupTidak" placeholder="Fitur di luar lingkup"></textarea></div>
+      </div>
+
+      <div class="sub-title"><span class="tag">1.6</span><span class="txt">Target Pengguna</span></div>
+      <input class="input serif-input" id="targetUser" placeholder="Siapa pengguna aplikasi ini">
+
+      <div class="sub-title"><span class="tag">1.7</span><span class="txt">Manfaat</span></div>
+      <textarea class="input serif-input" rows="2" id="manfaat" placeholder="Manfaat bagi pengguna / institusi"></textarea>
+    </div>
+  </div>
+
+  <!-- ============ BAB II ============ -->
+  <div class="section" id="bab2" data-toc="Perancangan Basis Data">
+    <div class="section-head"><span class="num">BAB II</span><h2>Perancangan Basis Data</h2>
+      <button type="button" class="btn btn-sm btn-light head-action no-print" id="btnTambahTabel">+ Tabel</button>
+    </div>
+    <div class="section-body">
+      <div class="sub-title"><span class="tag">2.1</span><span class="txt">Skema Tabel dan Relasi</span></div>
+      <p class="hint">Atur tabel, kolom, tipe data, primary key, dan foreign key. DDL tergenerate otomatis.</p>
+      <div id="daftarTabelDinamis"></div>
+
+      <div class="grid g-2" style="margin-top:18px;">
+        <div>
+          <div class="sub-title"><span class="tag">2.2</span><span class="txt">DDL Lengkap</span></div>
+          <div class="code-block" id="previewDDL" style="height:200px;">-- SQL akan muncul</div>
+        </div>
+        <div>
+          <div class="sub-title"><span class="tag">2.3</span><span class="txt">Ringkasan Relasi (FK)</span></div>
+          <div class="code-block" id="previewRelasi" style="height:200px;">-- Relasi antar tabel</div>
+        </div>
+      </div>
+
+      <div class="sub-title"><span class="tag">2.4</span><span class="txt">Kamus Data</span></div>
+      <div class="table-scroll"><table class="tbl" id="dataDictionary"><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ============ BAB III ============ -->
+  <div class="section" id="bab3" data-toc="Arsitektur Sistem dan Perancangan">
+    <div class="section-head"><span class="num">BAB III</span><h2>Arsitektur Sistem dan Perancangan</h2></div>
+    <div class="section-body">
+      <div class="sub-title"><span class="tag">3.1</span><span class="txt">Arsitektur dan Tech Stack</span></div>
+      <textarea data-required data-label="3.1 Arsitektur dan Tech Stack" class="input serif-input mb" rows="6" id="techStackDetail" placeholder="Arsitektur:&#10;- Backend:&#10;- Database:&#10;- Frontend:&#10;- Keamanan:"></textarea>
+
+      <div class="sub-title"><span class="tag">3.2</span><span class="txt">Struktur Folder Proyek</span></div>
+      <textarea class="input mb" rows="6" id="folderStructureDetail" placeholder="nama_proyek/&#10;|-- config/&#10;|-- assets/&#10;`-- ..."></textarea>
+
+      <div class="sub-title"><span class="tag">3.3</span><span class="txt">Mockup / Wireframe Antarmuka</span></div>
+      <div class="gallery" id="mockupGalleryContainer"></div>
+      <div class="no-print" style="margin-top:10px;">
+        <button type="button" class="btn btn-sm btn-light btn-tambah-gambar" data-gallery="mockup">+ Gambar Mockup</button>
+      </div>
+
+      <div class="sub-title"><span class="tag">3.4</span><span class="txt">Alur Navigasi (User Flow)</span></div>
+      <textarea class="input serif-input mb" rows="3" id="userFlow" placeholder="Login -> Dashboard -> Pilih menu -> Operasi -> Logout"></textarea>
+
+      <div class="sub-title"><span class="tag">3.5</span><span class="txt">Tabel Rute / Endpoint</span></div>
+      <textarea class="input" rows="5" id="routingTable" placeholder="/ -> dashboard&#10;/barang -> list&#10;..."></textarea>
+    </div>
+  </div>
+
+  <!-- ============ BAB IV ============ -->
+  <div class="section" id="bab4" data-toc="Implementasi">
+    <div class="section-head"><span class="num">BAB IV</span><h2>Implementasi</h2></div>
+    <div class="section-body">
+      <div class="sub-title"><span class="tag">4.1</span><span class="txt">Operasi CREATE</span></div>
+      <textarea class="input mb" rows="4" id="codeCreate" placeholder="Potongan kode / query INSERT"></textarea>
+      <div class="sub-title"><span class="tag">4.2</span><span class="txt">Operasi READ (dengan JOIN)</span></div>
+      <textarea class="input mb" rows="4" id="codeRead" placeholder="Query SELECT / JOIN"></textarea>
+      <div class="sub-title"><span class="tag">4.3</span><span class="txt">Operasi UPDATE</span></div>
+      <textarea class="input mb" rows="4" id="codeUpdate" placeholder="Query UPDATE"></textarea>
+      <div class="sub-title"><span class="tag">4.4</span><span class="txt">Operasi DELETE</span></div>
+      <textarea class="input mb" rows="4" id="codeDelete" placeholder="Query DELETE"></textarea>
+
+      <div class="sub-title"><span class="tag">4.5</span><span class="txt">Dokumentasi Tampilan (Screenshot)</span></div>
+      <div class="gallery" id="screenshotGalleryContainer"></div>
+      <div class="no-print" style="margin-top:10px;">
+        <button type="button" class="btn btn-sm btn-light btn-tambah-gambar" data-gallery="screenshot">+ Screenshot</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ BAB V ============ -->
+  <div class="section" id="bab5" data-toc="Deployment dan Hosting">
+    <div class="section-head"><span class="num">BAB V</span><h2>Deployment dan Hosting</h2></div>
+    <div class="section-body">
+      <div class="grid g-2 mb">
+        <div><label class="fld">5.1 Metode Hosting</label>
+          <select class="input" id="metodeHosting">
+            <option>Hosting Gratis (000webhost / InfinityFree)</option>
+            <option>Hosting Berbayar</option>
+            <option>VPS / Cloud</option>
+            <option>Local + Tunnel (ngrok)</option>
+            <option>Tidak di-deploy (lokal saja)</option>
+          </select>
+        </div>
+        <div><label class="fld">5.2 URL Deployment</label><input class="input" id="urlHosting" placeholder="https://..."></div>
+      </div>
+      <div class="sub-title"><span class="tag">5.3</span><span class="txt">Langkah Deployment</span></div>
+      <textarea class="input serif-input mb" rows="4" id="langkahDeploy" placeholder="1. Export database&#10;2. Upload file&#10;3. Import .sql&#10;4. Sesuaikan konfigurasi&#10;5. Pengujian online"></textarea>
+      <div class="sub-title"><span class="tag">5.4</span><span class="txt">Perubahan Konfigurasi (Lokal ke Hosting)</span></div>
+      <textarea class="input" rows="3" id="konfigChange" placeholder="Lokal: ...&#10;Hosting: ..."></textarea>
+    </div>
+  </div>
+
+  <!-- ============ BAB VI ============ -->
+  <div class="section" id="bab6" data-toc="Pengujian Sistem">
+    <div class="section-head"><span class="num">BAB VI</span><h2>Pengujian Sistem</h2>
+      <button type="button" class="btn btn-sm btn-light head-action no-print" id="btnTambahTestCase">+ Skenario</button>
+    </div>
+    <div class="section-body">
+      <div class="sub-title"><span class="tag">6.1</span><span class="txt">Skenario dan Hasil Uji</span></div>
+      <p class="hint">Tambahkan skenario pengujian sesuai fitur. Lampirkan bukti screenshot tiap pengujian.</p>
+      <div id="testCasesContainer"></div>
+
+      <div class="sub-title"><span class="tag">6.2</span><span class="txt">Ringkasan Hasil Pengujian</span></div>
+      <textarea class="input serif-input mb" rows="3" id="ringkasanPengujian" placeholder="Ringkasan dari seluruh skenario uji..."></textarea>
+
+      <div class="sub-title"><span class="tag">6.3</span><span class="txt">Kendala dan Solusi</span></div>
+      <textarea class="input serif-input mb" rows="4" id="kendalaSolusiPengujian" placeholder="Kendala 1: ...&#10;Solusi: ..."></textarea>
+
+      <div class="sub-title"><span class="tag">6.4</span><span class="txt">Kesimpulan Pengujian</span></div>
+      <textarea class="input serif-input" rows="2" id="kesimpulanPengujian" placeholder="Status kelayakan sistem"></textarea>
+    </div>
+  </div>
+
+  <!-- ============ BAB VII ============ -->
+  <div class="section" id="bab7" data-toc="Kesimpulan dan Saran">
+    <div class="section-head"><span class="num">BAB VII</span><h2>Kesimpulan dan Saran</h2></div>
+    <div class="section-body">
+      <div class="sub-title"><span class="tag">7.1</span><span class="txt">Kesimpulan</span></div>
+      <textarea data-required data-label="7.1 Kesimpulan" class="input serif-input mb" rows="4" id="kesimpulan" placeholder="Kesimpulan dari keseluruhan proyek..."></textarea>
+      <div class="sub-title"><span class="tag">7.2</span><span class="txt">Saran Pengembangan</span></div>
+      <textarea class="input serif-input" rows="3" id="saran" placeholder="1. ...&#10;2. ..."></textarea>
+    </div>
+  </div>
+
+  <!-- ============ LAMPIRAN ============ -->
+  <div class="section" id="lampiran" data-toc="Lampiran">
+    <div class="section-head"><span class="num">LAMP.</span><h2>Lampiran</h2></div>
+    <div class="section-body">
+      <div class="sub-title"><span class="tag">A</span><span class="txt">DDL + DML Lengkap</span></div>
+      <textarea class="input mb" rows="6" id="lampiranSQL"></textarea>
+
+      <div class="sub-title"><span class="tag">B</span><span class="txt">Tautan Repository GitHub</span></div>
+      <input data-required data-label="Tautan Repository GitHub" class="input mb" id="githubRepo" placeholder="https://github.com/username/nama-repo">
+      <p class="hint">Pastikan repository bersifat publik (Public) agar dapat diakses dosen, dan berisi seluruh source code proyek.</p>
+
+      <div class="sub-title"><span class="tag">C</span><span class="txt">Tautan Video Demo (YouTube)</span></div>
+      <input data-required data-label="Tautan Video Demo (YouTube)" class="input mb" id="videoLink" placeholder="https://youtu.be/...">
+      <div class="notice-box">
+        <strong>Ketentuan video:</strong> Pada awal video, mahasiswa <u>WAJIB memperkenalkan diri</u> (nama dan NIM) serta menyatakan dengan jelas sebagai <strong>mahasiswa Politeknik Negeri Lampung</strong>, kemudian mendemonstrasikan penggunaan aplikasi (alur CRUD dan fitur utama). Video diunggah ke YouTube dengan status minimal <em>Unlisted</em>.
+      </div>
+
+      <div class="sub-title"><span class="tag">D</span><span class="txt">Referensi</span></div>
+      <textarea class="input serif-input mb" rows="3" id="referensi" placeholder="1. ...&#10;2. ..."></textarea>
+
+      <div class="sub-title"><span class="tag">E</span><span class="txt">Pernyataan Orisinalitas dan Penggunaan AI</span></div>
+      <textarea class="input serif-input" rows="3" id="pernyataanAI" placeholder="Saya menyatakan dokumen ini adalah hasil karya sendiri. Penggunaan bantuan AI (jika ada) saya cantumkan secara jujur..."></textarea>
+    </div>
+  </div>
+
+  <footer>
+    <div>Dokumen RND &middot; Final Project Pemrograman SQL II</div>
+    <div class="copyright">&copy; <span id="copyYear"></span> ComX-<span class="cloak">reza-redo</span> &middot; Politeknik Negeri Lampung</div>
+  </footer>
+</div>
+
+<!-- ============ ACTION BAR ============ -->
+<div class="action-bar no-print">
+  <div class="group">
+    <button class="btn btn-ok" id="simpanDataBtn">Simpan</button>
+    <button class="btn btn-warn" id="resetBtn">Reset</button>
+  </div>
+  <div class="group">
+    <button class="btn btn-light" id="exportBtn" title="Unduh backup .json (portabel)">Export</button>
+    <button class="btn btn-light" id="importBtn" title="Muat dari file .json">Import</button>
+    <input type="file" id="importFile" accept="application/json,.json" style="display:none">
+    <button class="btn btn-light" id="contohBtn">Isi Contoh</button>
+    <button class="btn btn-primary" id="cetakPDFBtn">Validasi &amp; Cetak PDF</button>
+  </div>
+</div>
+
+<script src="assets/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan R&D – Sistem Informasi Penyewaan Lapangan MiniSoccer Polinela</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Times+New+Roman:ital,wght@0,400;0,700;1,400&family=Times+New+Roman&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 12pt;
+      line-height: 1.9;
+      color: #000;
+      background: #f0f0f0;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 10mm auto;
+      background: #fff;
+      padding: 30mm 30mm 25mm 35mm; /* Top Right Bottom Left – standard margins */
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      page-break-after: always;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+      }
+      .no-print { display: none; }
+    }
+
+    /* ===== COVER PAGE ===== */
+    .cover {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 237mm;
+    }
+    .cover .logo { width: 70px; height: 70px; margin-bottom: 4mm; }
+    .cover .univ-name { font-size: 14pt; font-weight: bold; line-height: 1.4; }
+    .cover hr { width: 100%; border: none; border-top: 3px solid #000; margin: 3mm 0; }
+    .cover .report-type { font-size: 12pt; margin: 5mm 0 2mm; }
+    .cover .title { font-size: 16pt; font-weight: bold; line-height: 1.5; margin: 6mm 0; text-transform: uppercase; }
+    .cover .subtitle { font-size: 12pt; margin: 2mm 0 8mm; }
+    .cover .author-block { font-size: 12pt; line-height: 1.8; margin: 4mm 0; }
+    .cover .institution { font-size: 12pt; font-weight: bold; margin-top: 8mm; line-height: 1.5; }
+    .cover .year { font-size: 13pt; font-weight: bold; margin-top: 3mm; }
+
+    /* ===== STRUCTURE ===== */
+    .chapter-title {
+      font-size: 14pt;
+      font-weight: bold;
+      text-align: center;
+      text-transform: uppercase;
+      margin: 0 0 6mm 0;
+      letter-spacing: 0.5px;
+    }
+
+    .section-heading {
+      font-size: 12pt;
+      font-weight: bold;
+      margin: 7mm 0 2mm 0;
+    }
+
+    .sub-heading {
+      font-size: 12pt;
+      font-weight: bold;
+      margin: 5mm 0 2mm 0;
+    }
+
+    p {
+      text-align: justify;
+      text-indent: 10mm;
+      margin-bottom: 2mm;
+    }
+
+    p.no-indent { text-indent: 0; }
+
+    ol, ul {
+      margin: 2mm 0 3mm 15mm;
+    }
+    li { margin-bottom: 1mm; text-align: justify; }
+
+    /* ===== TABLES ===== */
+    .tbl-wrapper { margin: 4mm 0 6mm; }
+    .tbl-caption {
+      font-size: 11pt;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 2mm;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11pt;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 3mm 4mm;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #ddd;
+      font-weight: bold;
+      text-align: center;
+    }
+    td.center { text-align: center; }
+
+    /* ===== FIGURES ===== */
+    .fig-wrapper {
+      margin: 4mm auto 6mm;
+      text-align: center;
+    }
+    .fig-wrapper img { max-width: 100%; border: 1px solid #ccc; }
+    .fig-caption {
+      font-size: 11pt;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 2mm;
+    }
+
+    /* Code / SQL block */
+    .code-block {
+      font-family: "Courier New", monospace;
+      font-size: 9pt;
+      background: #f5f5f5;
+      border: 1px solid #ccc;
+      padding: 4mm;
+      margin: 3mm 0 5mm;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    /* ===== NAV (no-print) ===== */
+    .nav-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: #1a1a2e;
+      color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      z-index: 9999;
+      flex-wrap: wrap;
+    }
+    .nav-bar a {
+      color: #4ade80;
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .nav-bar a:hover { background: rgba(74,222,128,0.15); }
+    .nav-bar .btn-print {
+      margin-left: auto;
+      background: #4ade80;
+      color: #000;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .nav-bar .btn-print:hover { background: #22c55e; }
+    body { padding-top: 46px; }
+    @media print { body { padding-top: 0; } }
+
+    .page-num {
+      text-align: center;
+      font-size: 11pt;
+      margin-top: 8mm;
+    }
+
+    .daftar-isi-line {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      margin: 1mm 0;
+    }
+    .daftar-isi-line .dots {
+      flex: 1;
+      border-bottom: 1px dotted #000;
+      margin-bottom: 3px;
+    }
+    .daftar-isi-line .pg { white-space: nowrap; font-size: 11pt; }
+
+    .indent-1 { padding-left: 8mm; }
+    .indent-2 { padding-left: 16mm; }
+  </style>
+</head>
+<body>
+
+<!-- No-print Navigation Bar -->
+<div class="nav-bar no-print">
+  <strong style="color:#fff">📄 Laporan R&amp;D – Polinela MiniSoccer</strong>
+  <a href="#cover">Cover</a>
+  <a href="#bab1">Bab I</a>
+  <a href="#bab2">Bab II</a>
+  <a href="#bab3">Bab III</a>
+  <a href="#bab4">Bab IV</a>
+  <a href="#bab5">Bab V</a>
+  <a href="#dafpus">Daftar Pustaka</a>
+  <button class="btn-print" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- HALAMAN SAMPUL                                               -->
+<!-- ============================================================ -->
+<div class="page" id="cover">
+  <div class="cover">
+    <div>
+      <div class="univ-name">
+        POLITEKNIK NEGERI LAMPUNG<br>(POLINELA)
+      </div>
+      <hr>
+    </div>
+    <div>
+      <div class="report-type">LAPORAN PENELITIAN DAN PENGEMBANGAN (R&amp;D)</div>
+      <div class="title">
+        Sistem Informasi Penyewaan Lapangan MiniSoccer<br>
+        Berbasis Database Relasional<br>
+        di Politeknik Negeri Lampung
+      </div>
+      <div class="subtitle">Diajukan sebagai syarat kelengkapan Tugas Akhir / PKL</div>
+    </div>
+    <div>
+      <div class="author-block">
+        Disusun Oleh:<br>
+        <strong>Frans Mahasiswa Polinela</strong><br>
+        NIM: 2024001001<br>
+        Program Studi Manajemen Informatika<br>
+        Jurusan Teknologi Informasi
+      </div>
+    </div>
+    <div>
+      <div class="institution">
+        POLITEKNIK NEGERI LAMPUNG<br>
+        BANDAR LAMPUNG
+      </div>
+      <div class="year">2025 / 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- KATA PENGANTAR                                               -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="chapter-title">KATA PENGANTAR</div>
+  <p>Puji dan syukur penulis panjatkan ke hadirat Tuhan Yang Maha Esa atas segala rahmat dan karunia-Nya, sehingga penulis dapat menyelesaikan laporan penelitian dan pengembangan (R&D) yang berjudul <em>"Sistem Informasi Penyewaan Lapangan MiniSoccer Berbasis Database Relasional di Politeknik Negeri Lampung"</em> ini dengan baik dan tepat waktu.</p>
+  <p>Laporan ini disusun sebagai salah satu syarat kelengkapan tugas akhir pada Program Studi Manajemen Informatika, Jurusan Teknologi Informasi, Politeknik Negeri Lampung. Penelitian ini bertujuan untuk merancang dan mengimplementasikan sebuah sistem informasi berbasis web yang mampu mengelola proses penyewaan lapangan minisoccer secara terkomputerisasi, efisien, dan akurat.</p>
+  <p>Dalam proses penyusunan laporan ini, penulis mendapat banyak bimbingan, arahan, dan dukungan dari berbagai pihak. Oleh karena itu, penulis mengucapkan terima kasih yang sebesar-besarnya kepada:</p>
+  <ol>
+    <li>Direktur Politeknik Negeri Lampung atas fasilitas dan dukungan kelembagaan yang diberikan.</li>
+    <li>Ketua Jurusan Teknologi Informasi atas bimbingan akademik selama proses perkuliahan.</li>
+    <li>Dosen Pembimbing yang telah memberikan arahan, masukan, dan koreksi selama proses penelitian dan penulisan laporan.</li>
+    <li>Pengelola lapangan minisoccer Polinela atas izin dan kemudahan akses data yang diberikan selama penelitian berlangsung.</li>
+    <li>Orang tua dan keluarga yang senantiasa memberikan doa, semangat, dan dukungan penuh.</li>
+    <li>Seluruh rekan mahasiswa yang telah membantu dalam proses pengujian sistem dan penyempurnaan laporan.</li>
+  </ol>
+  <p>Penulis menyadari bahwa laporan ini masih jauh dari sempurna, baik dari segi teknis maupun penulisan. Oleh karena itu, kritik dan saran yang bersifat konstruktif sangat penulis harapkan demi perbaikan di masa yang akan datang.</p>
+  <p>Akhir kata, penulis berharap laporan ini dapat memberikan manfaat bagi pembaca, khususnya bagi pengembangan sistem informasi pengelolaan fasilitas olahraga di lingkungan kampus.</p>
+  <br><br>
+  <p class="no-indent" style="text-align:right; padding-right: 10mm;">
+    Bandar Lampung, Juni 2026<br><br><br>
+    <strong>Penulis</strong>
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAFTAR ISI                                                   -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="chapter-title">DAFTAR ISI</div>
+  <br>
+
+  <div class="daftar-isi-line"><span>Kata Pengantar</span><span class="dots"></span><span class="pg">i</span></div>
+  <div class="daftar-isi-line"><span>Daftar Isi</span><span class="dots"></span><span class="pg">ii</span></div>
+  <div class="daftar-isi-line"><span>Daftar Tabel</span><span class="dots"></span><span class="pg">iii</span></div>
+  <div class="daftar-isi-line"><span>Daftar Gambar</span><span class="dots"></span><span class="pg">iv</span></div>
+  <br>
+  <div class="daftar-isi-line"><strong>BAB I — PENDAHULUAN DAN ANALISIS KEBUTUHAN</strong><span class="dots"></span><span class="pg">1</span></div>
+  <div class="daftar-isi-line indent-1"><span>1.1 Latar Belakang</span><span class="dots"></span><span class="pg">1</span></div>
+  <div class="daftar-isi-line indent-1"><span>1.2 Rumusan Masalah</span><span class="dots"></span><span class="pg">2</span></div>
+  <div class="daftar-isi-line indent-1"><span>1.3 Tujuan Proyek</span><span class="dots"></span><span class="pg">3</span></div>
+  <div class="daftar-isi-line indent-1"><span>1.4 Ruang Lingkup — Dikerjakan</span><span class="dots"></span><span class="pg">3</span></div>
+  <div class="daftar-isi-line indent-1"><span>1.5 Batasan — Tidak Dikerjakan</span><span class="dots"></span><span class="pg">4</span></div>
+  <div class="daftar-isi-line indent-1"><span>1.6 Target Pengguna</span><span class="dots"></span><span class="pg">4</span></div>
+  <div class="daftar-isi-line indent-1"><span>1.7 Manfaat</span><span class="dots"></span><span class="pg">5</span></div>
+  <br>
+  <div class="daftar-isi-line"><strong>BAB II — TINJAUAN PUSTAKA</strong><span class="dots"></span><span class="pg">6</span></div>
+  <div class="daftar-isi-line indent-1"><span>2.1 Sistem Informasi</span><span class="dots"></span><span class="pg">6</span></div>
+  <div class="daftar-isi-line indent-1"><span>2.2 Database Relasional</span><span class="dots"></span><span class="pg">7</span></div>
+  <div class="daftar-isi-line indent-1"><span>2.3 Lapangan MiniSoccer</span><span class="dots"></span><span class="pg">8</span></div>
+  <div class="daftar-isi-line indent-1"><span>2.4 Teknologi yang Digunakan</span><span class="dots"></span><span class="pg">8</span></div>
+  <div class="daftar-isi-line indent-1"><span>2.5 Penelitian Terdahulu</span><span class="dots"></span><span class="pg">10</span></div>
+  <br>
+  <div class="daftar-isi-line"><strong>BAB III — METODOLOGI PENELITIAN</strong><span class="dots"></span><span class="pg">12</span></div>
+  <div class="daftar-isi-line indent-1"><span>3.1 Metode Penelitian</span><span class="dots"></span><span class="pg">12</span></div>
+  <div class="daftar-isi-line indent-1"><span>3.2 Analisis Kebutuhan Sistem</span><span class="dots"></span><span class="pg">13</span></div>
+  <div class="daftar-isi-line indent-1"><span>3.3 Perancangan Sistem</span><span class="dots"></span><span class="pg">14</span></div>
+  <div class="daftar-isi-line indent-1"><span>3.4 Perancangan Database</span><span class="dots"></span><span class="pg">16</span></div>
+  <div class="daftar-isi-line indent-1"><span>3.5 Perancangan Antarmuka Pengguna</span><span class="dots"></span><span class="pg">19</span></div>
+  <div class="daftar-isi-line indent-1"><span>3.6 Implementasi Sistem</span><span class="dots"></span><span class="pg">20</span></div>
+  <br>
+  <div class="daftar-isi-line"><strong>BAB IV — HASIL DAN PEMBAHASAN</strong><span class="dots"></span><span class="pg">22</span></div>
+  <div class="daftar-isi-line indent-1"><span>4.1 Hasil Implementasi Sistem</span><span class="dots"></span><span class="pg">22</span></div>
+  <div class="daftar-isi-line indent-1"><span>4.2 Tampilan Antarmuka Sistem</span><span class="dots"></span><span class="pg">23</span></div>
+  <div class="daftar-isi-line indent-1"><span>4.3 Pengujian Sistem</span><span class="dots"></span><span class="pg">30</span></div>
+  <div class="daftar-isi-line indent-1"><span>4.4 Pembahasan</span><span class="dots"></span><span class="pg">33</span></div>
+  <br>
+  <div class="daftar-isi-line"><strong>BAB V — PENUTUP</strong><span class="dots"></span><span class="pg">35</span></div>
+  <div class="daftar-isi-line indent-1"><span>5.1 Kesimpulan</span><span class="dots"></span><span class="pg">35</span></div>
+  <div class="daftar-isi-line indent-1"><span>5.2 Saran</span><span class="dots"></span><span class="pg">36</span></div>
+  <br>
+  <div class="daftar-isi-line"><strong>Daftar Pustaka</strong><span class="dots"></span><span class="pg">37</span></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAFTAR TABEL                                                 -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="chapter-title">DAFTAR TABEL</div>
+  <br>
+  <div class="daftar-isi-line"><span>Tabel 2.1 Perbandingan DBMS</span><span class="dots"></span><span class="pg">9</span></div>
+  <div class="daftar-isi-line"><span>Tabel 2.2 Penelitian Terdahulu</span><span class="dots"></span><span class="pg">10</span></div>
+  <div class="daftar-isi-line"><span>Tabel 3.1 Analisis Kebutuhan Fungsional</span><span class="dots"></span><span class="pg">13</span></div>
+  <div class="daftar-isi-line"><span>Tabel 3.2 Analisis Kebutuhan Non-Fungsional</span><span class="dots"></span><span class="pg">14</span></div>
+  <div class="daftar-isi-line"><span>Tabel 3.3 Struktur Tabel users</span><span class="dots"></span><span class="pg">16</span></div>
+  <div class="daftar-isi-line"><span>Tabel 3.4 Struktur Tabel fields</span><span class="dots"></span><span class="pg">17</span></div>
+  <div class="daftar-isi-line"><span>Tabel 3.5 Struktur Tabel bookings</span><span class="dots"></span><span class="pg">18</span></div>
+  <div class="daftar-isi-line"><span>Tabel 3.6 Struktur Tabel transactions</span><span class="dots"></span><span class="pg">18</span></div>
+  <div class="daftar-isi-line"><span>Tabel 4.1 Daftar Endpoint REST API</span><span class="dots"></span><span class="pg">22</span></div>
+  <div class="daftar-isi-line"><span>Tabel 4.2 Skenario Pengujian Black-Box — Autentikasi</span><span class="dots"></span><span class="pg">30</span></div>
+  <div class="daftar-isi-line"><span>Tabel 4.3 Skenario Pengujian Black-Box — Pemesanan</span><span class="dots"></span><span class="pg">31</span></div>
+  <div class="daftar-isi-line"><span>Tabel 4.4 Skenario Pengujian Black-Box — Admin Panel</span><span class="dots"></span><span class="pg">32</span></div>
+  <br>
+
+  <div class="chapter-title" style="margin-top: 12mm;">DAFTAR GAMBAR</div>
+  <br>
+  <div class="daftar-isi-line"><span>Gambar 3.1 Use-Case Diagram Sistem</span><span class="dots"></span><span class="pg">15</span></div>
+  <div class="daftar-isi-line"><span>Gambar 3.2 Entity-Relationship Diagram (ERD)</span><span class="dots"></span><span class="pg">16</span></div>
+  <div class="daftar-isi-line"><span>Gambar 3.3 Arsitektur Sistem (Client–Server)</span><span class="dots"></span><span class="pg">21</span></div>
+  <div class="daftar-isi-line"><span>Gambar 4.1 Tampilan Halaman Beranda (Landing Page)</span><span class="dots"></span><span class="pg">23</span></div>
+  <div class="daftar-isi-line"><span>Gambar 4.2 Halaman Cek Jadwal Lapangan</span><span class="dots"></span><span class="pg">24</span></div>
+  <div class="daftar-isi-line"><span>Gambar 4.3 Halaman Login dan Registrasi</span><span class="dots"></span><span class="pg">25</span></div>
+  <div class="daftar-isi-line"><span>Gambar 4.4 Dashboard Penyewa</span><span class="dots"></span><span class="pg">26</span></div>
+  <div class="daftar-isi-line"><span>Gambar 4.5 Panel Admin – Kelola Booking</span><span class="dots"></span><span class="pg">27</span></div>
+  <div class="daftar-isi-line"><span>Gambar 4.6 Panel Admin – Kelola Pengguna</span><span class="dots"></span><span class="pg">28</span></div>
+  <div class="daftar-isi-line"><span>Gambar 4.7 Panel Admin – Laporan Keuangan</span><span class="dots"></span><span class="pg">29</span></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BAB I — PENDAHULUAN                                         -->
+<!-- ============================================================ -->
+<div class="page" id="bab1">
+  <div class="chapter-title">BAB I<br>PENDAHULUAN DAN ANALISIS KEBUTUHAN</div>
+
+  <div class="section-heading">1.1 Latar Belakang</div>
+  <p>Perkembangan teknologi informasi telah memberikan dampak yang signifikan dalam berbagai bidang, termasuk dalam pengelolaan fasilitas olahraga. Salah satu fasilitas olahraga yang banyak diminati oleh masyarakat, khususnya mahasiswa, adalah lapangan minisoccer. Lapangan minisoccer sering digunakan untuk kegiatan olahraga, latihan rutin, pertandingan persahabatan, maupun penyelenggaraan turnamen.</p>
+  <p>Di lingkungan Politeknik Negeri Lampung (Polinela), proses penyewaan lapangan minisoccer masih berpotensi dilakukan secara manual, seperti melalui pencatatan di buku, komunikasi langsung dengan pengelola, atau melalui pesan singkat. Metode tersebut memiliki beberapa kelemahan, di antaranya risiko terjadinya kesalahan pencatatan jadwal, kesulitan dalam mengetahui ketersediaan lapangan, serta lambatnya proses pencarian data penyewaan yang telah dilakukan sebelumnya.</p>
+  <p>Selain itu, pengelolaan data yang belum terintegrasi dapat menyebabkan terjadinya benturan jadwal penyewaan, duplikasi data, dan kesulitan dalam menyusun laporan penggunaan lapangan. Permasalahan tersebut dapat mengurangi efektivitas pelayanan kepada pengguna serta menghambat proses administrasi pengelolaan fasilitas olahraga.</p>
+  <p>Untuk mengatasi permasalahan tersebut, diperlukan sebuah Sistem Informasi Penyewaan Lapangan MiniSoccer Polinela berbasis database relasional yang mampu mengelola data pengguna, data lapangan, jadwal penyewaan, transaksi penyewaan, serta laporan penggunaan lapangan secara terstruktur dan terintegrasi. Dengan adanya sistem ini, diharapkan proses penyewaan lapangan dapat dilakukan dengan lebih cepat, akurat, efisien, dan mudah diakses oleh seluruh pengguna.</p>
+
+  <div class="section-heading">1.2 Rumusan Masalah</div>
+  <p>Berdasarkan latar belakang yang telah diuraikan, rumusan masalah dalam penelitian ini adalah sebagai berikut:</p>
+  <ol>
+    <li>Bagaimana merancang sistem informasi yang dapat mengelola proses penyewaan Lapangan MiniSoccer Polinela secara terkomputerisasi dan efisien?</li>
+    <li>Bagaimana membangun database relasional yang dapat mengelola data pengguna, data lapangan, jadwal, dan transaksi penyewaan?</li>
+    <li>Bagaimana menyediakan informasi mengenai ketersediaan jadwal lapangan secara cepat dan akurat?</li>
+    <li>Bagaimana menghasilkan laporan penyewaan lapangan yang dapat digunakan sebagai bahan evaluasi dan pengambilan keputusan?</li>
+  </ol>
+
+  <div class="section-heading">1.3 Tujuan Proyek</div>
+  <p>Tujuan dari penelitian dan pengembangan sistem ini adalah:</p>
+  <ol>
+    <li>Membangun Sistem Informasi Penyewaan Lapangan MiniSoccer Polinela yang terkomputerisasi.</li>
+    <li>Merancang database relasional untuk mengelola data pengguna, data lapangan, jadwal, dan transaksi penyewaan.</li>
+    <li>Mempermudah proses pemesanan dan pengelolaan jadwal penyewaan lapangan.</li>
+    <li>Menyediakan informasi ketersediaan lapangan secara cepat dan akurat.</li>
+    <li>Menghasilkan laporan penyewaan lapangan yang dapat digunakan sebagai bahan evaluasi pengelolaan fasilitas.</li>
+  </ol>
+
+  <div class="section-heading">1.4 Ruang Lingkup — Dikerjakan</div>
+  <p>Fitur-fitur yang dikerjakan dalam proyek ini meliputi:</p>
+  <ol>
+    <li>Pengelolaan data pengguna (admin dan penyewa).</li>
+    <li>Pengelolaan data lapangan minisoccer.</li>
+    <li>Pengelolaan jadwal penyewaan lapangan.</li>
+    <li>Pencatatan transaksi penyewaan lapangan.</li>
+    <li>Pengecekan ketersediaan jadwal lapangan.</li>
+    <li>Pencarian data penyewaan berdasarkan nama penyewa atau tanggal.</li>
+    <li>Pembuatan laporan penyewaan lapangan.</li>
+    <li>Implementasi database relasional menggunakan SQL (SQLite).</li>
+  </ol>
+
+  <div class="section-heading">1.5 Batasan — Tidak Dikerjakan</div>
+  <p>Fitur-fitur berikut tidak termasuk dalam ruang lingkup proyek:</p>
+  <ol>
+    <li>Integrasi pembayaran online (payment gateway).</li>
+    <li>Integrasi notifikasi melalui WhatsApp, SMS, atau email.</li>
+    <li>Pengembangan aplikasi berbasis Android atau iOS.</li>
+    <li>Integrasi dengan sistem akademik Polinela.</li>
+    <li>Fitur pemetaan lokasi (GPS tracking).</li>
+    <li>Sistem reservasi otomatis berbasis kalender digital eksternal.</li>
+  </ol>
+
+  <div class="section-heading">1.6 Target Pengguna</div>
+  <p>Target pengguna dalam sistem informasi ini meliputi empat kelompok utama:</p>
+  <ol>
+    <li><strong>Admin/Pengelola Lapangan</strong>, yang bertugas mengelola data lapangan, jadwal, transaksi, dan laporan penyewaan.</li>
+    <li><strong>Mahasiswa Polinela</strong>, yang menggunakan sistem untuk melakukan penyewaan lapangan.</li>
+    <li><strong>Dosen dan Tenaga Kependidikan</strong>, yang memanfaatkan lapangan untuk kegiatan olahraga atau kegiatan institusi.</li>
+    <li><strong>Masyarakat Umum</strong> (jika diperbolehkan oleh pengelola), yang ingin menyewa lapangan minisoccer.</li>
+    <li><strong>Pihak Institusi Polinela</strong>, yang memanfaatkan laporan penggunaan lapangan untuk monitoring dan evaluasi.</li>
+  </ol>
+
+  <div class="section-heading">1.7 Manfaat</div>
+  <p><strong>Manfaat bagi Pengguna:</strong></p>
+  <ol>
+    <li>Mempermudah proses penyewaan lapangan minisoccer.</li>
+    <li>Mempercepat akses informasi mengenai ketersediaan jadwal lapangan.</li>
+    <li>Mengurangi risiko terjadinya benturan jadwal penyewaan.</li>
+    <li>Memudahkan pengguna dalam melihat riwayat penyewaan.</li>
+  </ol>
+  <p><strong>Manfaat bagi Institusi:</strong></p>
+  <ol>
+    <li>Meningkatkan efisiensi pengelolaan Lapangan MiniSoccer Polinela.</li>
+    <li>Menyediakan data penyewaan yang tersimpan secara terstruktur dan aman.</li>
+    <li>Mempermudah proses monitoring dan evaluasi penggunaan lapangan.</li>
+    <li>Mendukung pengambilan keputusan terkait pengembangan dan pemeliharaan fasilitas olahraga.</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<!-- BAB II — TINJAUAN PUSTAKA                                    -->
+<!-- ============================================================ -->
+<div class="page" id="bab2">
+  <div class="chapter-title">BAB II<br>TINJAUAN PUSTAKA</div>
+
+  <div class="section-heading">2.1 Sistem Informasi</div>
+  <p>Sistem informasi merupakan kombinasi dari perangkat keras, perangkat lunak, jaringan komunikasi, sumber daya data, dan sumber daya manusia yang mengumpulkan, mengubah, dan menyebarkan informasi dalam suatu organisasi (O'Brien &amp; Marakas, 2011). Sistem informasi berperan penting dalam mendukung proses pengambilan keputusan, koordinasi, pengendalian, analisis, serta visualisasi data dalam suatu organisasi.</p>
+  <p>Menurut Jogiyanto (2005), sistem informasi adalah suatu sistem yang ada dalam suatu organisasi yang mempertemukan kebutuhan pengolahan transaksi harian, mendukung operasi, bersifat manajerial, dan kegiatan strategi dari suatu organisasi dan menyediakan pihak luar tertentu dengan laporan-laporan yang diperlukan. Lebih lanjut, sistem informasi dapat diklasifikasikan berdasarkan fungsinya, antara lain: Sistem Pemrosesan Transaksi (Transaction Processing System/TPS), Sistem Informasi Manajemen (SIM), Sistem Pendukung Keputusan (Decision Support System/DSS), dan Sistem Pakar (Expert System).</p>
+  <p>Sistem yang dikembangkan dalam penelitian ini termasuk dalam kategori Sistem Pemrosesan Transaksi (TPS) sekaligus Sistem Informasi Manajemen (SIM), karena mampu memproses transaksi penyewaan secara real-time dan menghasilkan laporan untuk mendukung pengambilan keputusan manajemen.</p>
+
+  <div class="section-heading">2.2 Database Relasional</div>
+  <p>Database relasional adalah basis data yang mengorganisasi data ke dalam tabel-tabel (relasi) yang saling berhubungan melalui kunci asing (foreign key). Konsep database relasional pertama kali diperkenalkan oleh Edgar F. Codd pada tahun 1970 melalui makalahnya yang berjudul "A Relational Model of Data for Large Shared Data Banks" (Codd, 1970).</p>
+  <p>Bahasa standar untuk berinteraksi dengan database relasional adalah Structured Query Language (SQL). SQL memungkinkan pengguna untuk mendefinisikan struktur data (DDL), memanipulasi data (DML), dan mengontrol akses data (DCL). Beberapa perintah SQL yang umum digunakan antara lain: <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>CREATE TABLE</code>, dan <code>ALTER TABLE</code>.</p>
+  <p>Normalisasi database adalah proses mengorganisasi kolom dan tabel database untuk meminimalkan redundansi data dan meningkatkan integritas data. Bentuk normal yang umum digunakan dalam desain database adalah 1NF (First Normal Form), 2NF (Second Normal Form), dan 3NF (Third Normal Form). Database yang dirancang dalam penelitian ini mengikuti prinsip normalisasi hingga 3NF untuk memastikan konsistensi dan integritas data.</p>
+
+  <div class="section-heading">2.3 Lapangan MiniSoccer</div>
+  <p>Minisoccer atau futsal mini adalah olahraga yang dimainkan di lapangan berukuran lebih kecil dari lapangan sepak bola standar, dengan jumlah pemain yang lebih sedikit (biasanya 5–7 orang per tim). Lapangan minisoccer memiliki dimensi yang bervariasi, namun umumnya berkisar antara 25×15 meter hingga 40×20 meter, dengan permukaan yang dapat berupa rumput sintetis maupun rumput alami.</p>
+  <p>Di lingkungan kampus Politeknik Negeri Lampung, lapangan minisoccer menjadi salah satu fasilitas olahraga unggulan yang dimanfaatkan secara luas oleh mahasiswa, dosen, dan tenaga kependidikan. Pengelolaan jadwal penyewaan lapangan yang baik sangat diperlukan untuk memastikan tidak terjadi konflik jadwal dan lapangan dapat dimanfaatkan secara optimal.</p>
+
+  <div class="section-heading">2.4 Teknologi yang Digunakan</div>
+
+  <div class="sub-heading">2.4.1 Node.js dan Express.js</div>
+  <p>Node.js adalah lingkungan runtime JavaScript berbasis V8 engine Google Chrome yang memungkinkan eksekusi kode JavaScript di sisi server. Node.js menggunakan model I/O non-blocking dan event-driven yang menjadikannya sangat efisien untuk aplikasi yang memerlukan penanganan banyak koneksi secara bersamaan (Node.js Foundation, 2023).</p>
+  <p>Express.js adalah framework web minimalis untuk Node.js yang menyediakan berbagai fitur untuk membangun aplikasi web dan API RESTful. Express.js memudahkan pengembangan dengan menyediakan routing, middleware, dan penanganan HTTP request/response yang fleksibel (Expressjs.com, 2023).</p>
+
+  <div class="sub-heading">2.4.2 SQLite</div>
+  <p>SQLite adalah sistem manajemen basis data relasional (RDBMS) yang bersifat serverless, zero-configuration, dan menyimpan seluruh database dalam satu file. SQLite sangat cocok digunakan untuk aplikasi berskala kecil hingga menengah, embedded systems, dan prototyping karena kemudahannya dalam instalasi dan penggunaan (SQLite.org, 2023).</p>
+  <p>Keunggulan SQLite antara lain tidak memerlukan proses server terpisah, mendukung transaksi ACID (Atomicity, Consistency, Isolation, Durability), serta mendukung sebagian besar fitur SQL standar. Dalam penelitian ini, SQLite dipilih sebagai DBMS karena kemudahannya dalam deployment dan tidak memerlukan konfigurasi server database tambahan.</p>
+
+  <div class="sub-heading">2.4.3 REST API</div>
+  <p>Representational State Transfer (REST) adalah gaya arsitektur perangkat lunak yang mendefinisikan batasan untuk pembuatan layanan web. API RESTful menggunakan protokol HTTP dan metode-metode standar seperti GET, POST, PUT, dan DELETE untuk melakukan operasi CRUD (Create, Read, Update, Delete) pada sumber daya (Fielding, 2000).</p>
+  <p>Sistem yang dikembangkan menggunakan arsitektur REST API yang memisahkan lapisan backend (server) dan frontend (client). Backend bertugas menyediakan data melalui endpoint HTTP, sedangkan frontend mengonsumsi data tersebut menggunakan JavaScript Fetch API.</p>
+
+  <div class="sub-heading">2.4.4 HTML5, CSS3, dan JavaScript</div>
+  <p>Antarmuka pengguna (frontend) dibangun menggunakan teknologi web standar: HTML5 sebagai struktur halaman, CSS3 sebagai penata tampilan, dan JavaScript sebagai logika interaksi. Pendekatan Single Page Application (SPA) diimplementasikan dengan JavaScript vanilla tanpa framework tambahan, memungkinkan perpindahan antar tampilan tanpa memuat ulang halaman secara penuh.</p>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 2.1 Perbandingan DBMS untuk Aplikasi Web Skala Kecil–Menengah</div>
+    <table>
+      <thead>
+        <tr>
+          <th>DBMS</th>
+          <th>Tipe</th>
+          <th>Konfigurasi</th>
+          <th>Skala</th>
+          <th>Keterangan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SQLite</td>
+          <td>Relasional</td>
+          <td>Tanpa server</td>
+          <td>Kecil–menengah</td>
+          <td>Dipilih dalam penelitian ini</td>
+        </tr>
+        <tr>
+          <td>MySQL</td>
+          <td>Relasional</td>
+          <td>Server required</td>
+          <td>Menengah–besar</td>
+          <td>Populer untuk web app</td>
+        </tr>
+        <tr>
+          <td>PostgreSQL</td>
+          <td>Relasional</td>
+          <td>Server required</td>
+          <td>Besar</td>
+          <td>Fitur lengkap, enterprise</td>
+        </tr>
+        <tr>
+          <td>MongoDB</td>
+          <td>Non-relasional</td>
+          <td>Server required</td>
+          <td>Menengah–besar</td>
+          <td>Dokumen-based, NoSQL</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-heading">2.5 Penelitian Terdahulu</div>
+  <p>Beberapa penelitian terdahulu yang berkaitan dengan pengembangan sistem informasi pengelolaan fasilitas olahraga dan penyewaan lapangan telah dilakukan oleh beberapa peneliti. Berikut adalah ringkasan penelitian-penelitian tersebut:</p>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 2.2 Penelitian Terdahulu</div>
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Peneliti / Tahun</th>
+          <th>Judul</th>
+          <th>Metode</th>
+          <th>Hasil</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="center">1</td>
+          <td>Pratama, A. (2022)</td>
+          <td>Sistem Informasi Penyewaan Lapangan Futsal Berbasis Web</td>
+          <td>Waterfall, PHP+MySQL</td>
+          <td>Sistem berhasil mengurangi konflik jadwal sebesar 85%</td>
+        </tr>
+        <tr>
+          <td class="center">2</td>
+          <td>Rahayu, S. &amp; Nugroho, B. (2021)</td>
+          <td>Rancang Bangun Aplikasi Pemesanan Lapangan Olahraga Berbasis Android</td>
+          <td>Prototype, Firebase</td>
+          <td>Aplikasi mobile meningkatkan kemudahan akses pemesanan</td>
+        </tr>
+        <tr>
+          <td class="center">3</td>
+          <td>Kurniawan, D. (2023)</td>
+          <td>Penerapan REST API pada Sistem Manajemen Fasilitas Olahraga Kampus</td>
+          <td>Node.js, PostgreSQL</td>
+          <td>API RESTful memungkinkan integrasi multi-platform</td>
+        </tr>
+        <tr>
+          <td class="center">4</td>
+          <td>Sari, M. &amp; Hidayat, R. (2022)</td>
+          <td>Sistem Informasi Booking Lapangan Berbasis Database Relasional</td>
+          <td>Agile, SQLite</td>
+          <td>Pencatatan real-time meningkatkan akurasi data 90%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Perbedaan penelitian ini dengan penelitian terdahulu terletak pada integrasi antara backend Node.js/Express.js dengan SQLite sebagai DBMS, serta implementasi Single Page Application (SPA) pada sisi frontend yang memberikan pengalaman pengguna yang lebih lancar tanpa perpindahan halaman. Selain itu, penelitian ini secara khusus dirancang untuk lingkungan Politeknik Negeri Lampung dengan mempertimbangkan kategori pengguna yang beragam (mahasiswa, dosen, dan masyarakat umum).</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- BAB III — METODOLOGI                                         -->
+<!-- ============================================================ -->
+<div class="page" id="bab3">
+  <div class="chapter-title">BAB III<br>METODOLOGI PENELITIAN</div>
+
+  <div class="section-heading">3.1 Metode Penelitian</div>
+  <p>Penelitian ini menggunakan metode Research and Development (R&amp;D), yaitu metode penelitian yang digunakan untuk menghasilkan produk tertentu dan menguji keefektifan produk tersebut (Sugiyono, 2016). Dalam konteks pengembangan sistem informasi, R&amp;D diterapkan melalui siklus pengembangan perangkat lunak yang terstruktur.</p>
+  <p>Model pengembangan yang digunakan adalah <em>Waterfall Model</em> yang terdiri dari lima tahapan utama, yaitu: (1) Analisis Kebutuhan, (2) Perancangan Sistem, (3) Implementasi/Pengkodean, (4) Pengujian, dan (5) Pemeliharaan. Model ini dipilih karena tahapan yang jelas dan terstruktur serta cocok untuk proyek dengan ruang lingkup yang telah didefinisikan dengan baik sejak awal.</p>
+  <p>Teknik pengumpulan data yang digunakan dalam penelitian ini meliputi:</p>
+  <ol>
+    <li><strong>Observasi</strong> — Pengamatan langsung terhadap proses penyewaan lapangan minisoccer di Polinela untuk memahami alur kerja yang ada.</li>
+    <li><strong>Wawancara</strong> — Wawancara dengan pengelola lapangan untuk mengidentifikasi permasalahan dan kebutuhan sistem.</li>
+    <li><strong>Studi Literatur</strong> — Kajian terhadap buku, jurnal ilmiah, dan dokumentasi teknis yang relevan dengan pengembangan sistem informasi dan database relasional.</li>
+    <li><strong>Studi Dokumentasi</strong> — Analisis terhadap dokumen-dokumen yang berhubungan dengan proses penyewaan lapangan.</li>
+  </ol>
+
+  <div class="section-heading">3.2 Analisis Kebutuhan Sistem</div>
+
+  <div class="sub-heading">3.2.1 Kebutuhan Fungsional</div>
+  <p>Kebutuhan fungsional merupakan kebutuhan yang berisi proses-proses yang harus dapat dilakukan oleh sistem. Berikut adalah kebutuhan fungsional sistem yang diidentifikasi:</p>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 3.1 Analisis Kebutuhan Fungsional</div>
+    <table>
+      <thead>
+        <tr><th>Kode</th><th>Kebutuhan Fungsional</th><th>Aktor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="center">KF-01</td><td>Sistem dapat melakukan registrasi akun pengguna baru (mahasiswa, dosen, umum)</td><td>Pengguna</td></tr>
+        <tr><td class="center">KF-02</td><td>Sistem dapat melakukan autentikasi login dan logout pengguna</td><td>Pengguna, Admin</td></tr>
+        <tr><td class="center">KF-03</td><td>Sistem dapat menampilkan daftar lapangan yang tersedia beserta informasi harga</td><td>Pengguna, Admin</td></tr>
+        <tr><td class="center">KF-04</td><td>Sistem dapat menampilkan ketersediaan slot jadwal lapangan per tanggal secara real-time</td><td>Pengguna, Admin</td></tr>
+        <tr><td class="center">KF-05</td><td>Sistem dapat menerima pemesanan (booking) lapangan dari pengguna</td><td>Pengguna</td></tr>
+        <tr><td class="center">KF-06</td><td>Sistem dapat mendeteksi dan mencegah konflik jadwal (double booking)</td><td>Sistem</td></tr>
+        <tr><td class="center">KF-07</td><td>Sistem dapat mencetak kuitansi digital untuk setiap transaksi yang berhasil</td><td>Pengguna, Admin</td></tr>
+        <tr><td class="center">KF-08</td><td>Admin dapat melakukan CRUD data lapangan (tambah, edit, hapus lapangan)</td><td>Admin</td></tr>
+        <tr><td class="center">KF-09</td><td>Admin dapat menyetujui, menolak, dan menghapus data booking</td><td>Admin</td></tr>
+        <tr><td class="center">KF-10</td><td>Admin dapat mengelola data pengguna (CRUD akun)</td><td>Admin</td></tr>
+        <tr><td class="center">KF-11</td><td>Admin dapat mengonfirmasi status pembayaran</td><td>Admin</td></tr>
+        <tr><td class="center">KF-12</td><td>Sistem menghasilkan laporan keuangan dan statistik penggunaan lapangan</td><td>Admin</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sub-heading">3.2.2 Kebutuhan Non-Fungsional</div>
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 3.2 Analisis Kebutuhan Non-Fungsional</div>
+    <table>
+      <thead>
+        <tr><th>Kode</th><th>Aspek</th><th>Kebutuhan Non-Fungsional</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="center">KNF-01</td><td>Keamanan</td><td>Password pengguna harus disimpan dalam bentuk hash (bcryptjs)</td></tr>
+        <tr><td class="center">KNF-02</td><td>Keamanan</td><td>Sistem menggunakan session-based authentication dengan cookie aman</td></tr>
+        <tr><td class="center">KNF-03</td><td>Performa</td><td>Halaman harus dapat dimuat dalam waktu &lt; 3 detik pada koneksi normal</td></tr>
+        <tr><td class="center">KNF-04</td><td>Responsivitas</td><td>Antarmuka harus dapat menyesuaikan tampilan untuk perangkat mobile (≤768px)</td></tr>
+        <tr><td class="center">KNF-05</td><td>Ketersediaan</td><td>Sistem harus dapat berjalan di lingkungan lokal (localhost) tanpa internet</td></tr>
+        <tr><td class="center">KNF-06</td><td>Kemudahan Penggunaan</td><td>Antarmuka harus intuitif dan dapat digunakan tanpa pelatihan khusus</td></tr>
+        <tr><td class="center">KNF-07</td><td>Integritas Data</td><td>Database menggunakan foreign key constraint dan validasi data di sisi server</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-heading">3.3 Perancangan Sistem</div>
+
+  <div class="sub-heading">3.3.1 Use-Case Diagram</div>
+  <p>Use-case diagram digunakan untuk menggambarkan interaksi antara aktor (pengguna) dengan sistem secara keseluruhan. Sistem ini memiliki dua aktor utama, yaitu <em>Pengguna (Penyewa)</em> dan <em>Administrator</em>.</p>
+
+  <div class="fig-wrapper">
+    <div style="border: 1px solid #333; padding: 15mm 20mm; background: #fafafa; font-size: 10pt; line-height: 2.2;">
+      <strong style="display:block; text-align:center; margin-bottom: 4mm;">[ Use-Case Diagram ]</strong>
+      <table style="border: none; width: 100%;">
+        <tr>
+          <td style="border: none; width: 28%; vertical-align: top; padding: 0 4mm 0 0;">
+            <div style="border: 2px solid #555; border-radius: 50%; width: 32px; height: 32px; display:inline-block; text-align:center; line-height:30px; margin-right: 4px;">👤</div>
+            <strong>Penyewa</strong><br>
+            <span style="font-size:9pt; color: #444;">
+              • Lihat beranda &amp; lapangan<br>
+              • Cek jadwal lapangan<br>
+              • Registrasi akun<br>
+              • Login / Logout<br>
+              • Ajukan booking<br>
+              • Reschedule booking<br>
+              • Batalkan booking<br>
+              • Cetak kuitansi
+            </span>
+          </td>
+          <td style="border-left: 2px dashed #999; border-right: 2px dashed #999; border-top: none; border-bottom: none; width: 44%; vertical-align: top; padding: 0 6mm; text-align: center;">
+            <strong>SISTEM</strong><br>
+            <div style="border: 2px solid #333; border-radius: 8px; padding: 3mm; margin: 2mm 0; font-size: 9pt;">Pengelolaan Jadwal &amp; Anti-Overlap</div>
+            <div style="border: 2px solid #333; border-radius: 8px; padding: 3mm; margin: 2mm 0; font-size: 9pt;">Autentikasi &amp; Otorisasi Session</div>
+            <div style="border: 2px solid #333; border-radius: 8px; padding: 3mm; margin: 2mm 0; font-size: 9pt;">CRUD Data Lapangan &amp; Pengguna</div>
+            <div style="border: 2px solid #333; border-radius: 8px; padding: 3mm; margin: 2mm 0; font-size: 9pt;">Pembuatan Laporan Keuangan</div>
+          </td>
+          <td style="border: none; width: 28%; vertical-align: top; padding: 0 0 0 4mm; text-align: right;">
+            <div style="border: 2px solid #555; border-radius: 50%; width: 32px; height: 32px; display:inline-block; text-align:center; line-height:30px; margin-right: 4px;">🔧</div>
+            <strong>Administrator</strong><br>
+            <span style="font-size:9pt; color: #444;">
+              • Kelola booking<br>
+              • Approve / Cancel<br>
+              • Konfirmasi bayar<br>
+              • CRUD lapangan<br>
+              • CRUD pengguna<br>
+              • Laporan keuangan<br>
+              • Cetak laporan PDF
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="fig-caption">Gambar 3.1 Use-Case Diagram Sistem Informasi Penyewaan Lapangan MiniSoccer</div>
+  </div>
+
+  <div class="sub-heading">3.3.2 Entity-Relationship Diagram (ERD)</div>
+  <p>Entity-Relationship Diagram (ERD) digunakan untuk menggambarkan hubungan antar entitas dalam database sistem. Sistem ini terdiri dari empat entitas utama: <em>users</em>, <em>fields</em>, <em>bookings</em>, dan <em>transactions</em>.</p>
+
+  <div class="fig-wrapper">
+    <div style="border: 1px solid #333; padding: 10mm; background: #fafafa; font-size: 10pt;">
+      <strong style="display:block; text-align:center; margin-bottom: 4mm;">[ Entity-Relationship Diagram ]</strong>
+      <table style="border: none; width: 100%; text-align: center;">
+        <tr>
+          <td style="border: 2px solid #000; padding: 4mm; width: 20%; background: #fff;">
+            <strong>USERS</strong><br>
+            <span style="font-size: 9pt;">id (PK)<br>username<br>password_hash<br>full_name<br>user_type<br>identity_number<br>phone<br>created_at</span>
+          </td>
+          <td style="border: none; text-align: center; font-size: 16pt; padding: 2mm;">
+            1<br>─────<br>N
+          </td>
+          <td style="border: 2px solid #000; padding: 4mm; width: 22%; background: #fff;">
+            <strong>BOOKINGS</strong><br>
+            <span style="font-size: 9pt;">id (PK)<br>user_id (FK)<br>field_id (FK)<br>booking_date<br>start_time<br>end_time<br>total_price<br>status<br>created_at</span>
+          </td>
+          <td style="border: none; text-align: center; font-size: 16pt; padding: 2mm;">
+            1<br>─────<br>1
+          </td>
+          <td style="border: 2px solid #000; padding: 4mm; width: 22%; background: #fff;">
+            <strong>TRANSACTIONS</strong><br>
+            <span style="font-size: 9pt;">id (PK)<br>booking_id (FK)<br>payment_method<br>payment_status<br>transaction_date<br>created_at</span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5" style="border:none; padding: 3mm 0;"></td>
+        </tr>
+        <tr>
+          <td style="border: none;"></td>
+          <td colspan="1" style="border: none; font-size: 16pt; text-align: center;">N<br>│<br>│<br>1</td>
+          <td style="border: none;"></td>
+          <td colspan="2" style="border: none;"></td>
+        </tr>
+        <tr>
+          <td style="border: none;"></td>
+          <td colspan="1" style="border: 2px solid #000; padding: 4mm; text-align: center; background: #fff;">
+            <strong>FIELDS</strong><br>
+            <span style="font-size: 9pt;">id (PK)<br>name<br>type<br>price_per_hour<br>description<br>status<br>created_at</span>
+          </td>
+          <td colspan="3" style="border: none;"></td>
+        </tr>
+      </table>
+    </div>
+    <div class="fig-caption">Gambar 3.2 Entity-Relationship Diagram (ERD)</div>
+  </div>
+
+  <div class="section-heading">3.4 Perancangan Database</div>
+  <p>Database sistem ini dirancang menggunakan SQLite dengan empat tabel relasional yang saling berhubungan. Berikut adalah rincian struktur tabel-tabel tersebut:</p>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 3.3 Struktur Tabel <em>users</em></div>
+    <table>
+      <thead><tr><th>Field</th><th>Tipe Data</th><th>Constraint</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>INTEGER</td><td>PRIMARY KEY, AUTOINCREMENT</td><td>Identifikasi unik pengguna</td></tr>
+        <tr><td>username</td><td>TEXT</td><td>UNIQUE, NOT NULL</td><td>Nama pengguna untuk login</td></tr>
+        <tr><td>password_hash</td><td>TEXT</td><td>NOT NULL</td><td>Hash password (bcryptjs)</td></tr>
+        <tr><td>full_name</td><td>TEXT</td><td>NOT NULL</td><td>Nama lengkap pengguna</td></tr>
+        <tr><td>user_type</td><td>TEXT</td><td>CHECK(admin/mahasiswa/dosen/umum)</td><td>Kategori/peran pengguna</td></tr>
+        <tr><td>identity_number</td><td>TEXT</td><td>NULL</td><td>NIM/NIP/KTP pengguna</td></tr>
+        <tr><td>phone</td><td>TEXT</td><td>NOT NULL</td><td>Nomor telepon/WhatsApp</td></tr>
+        <tr><td>created_at</td><td>DATETIME</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>Waktu akun dibuat</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 3.4 Struktur Tabel <em>fields</em></div>
+    <table>
+      <thead><tr><th>Field</th><th>Tipe Data</th><th>Constraint</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>INTEGER</td><td>PRIMARY KEY, AUTOINCREMENT</td><td>Identifikasi unik lapangan</td></tr>
+        <tr><td>name</td><td>TEXT</td><td>UNIQUE, NOT NULL</td><td>Nama lapangan</td></tr>
+        <tr><td>type</td><td>TEXT</td><td>NOT NULL</td><td>Jenis permukaan lapangan</td></tr>
+        <tr><td>price_per_hour</td><td>INTEGER</td><td>NOT NULL</td><td>Harga sewa per jam (Rupiah)</td></tr>
+        <tr><td>description</td><td>TEXT</td><td>NULL</td><td>Deskripsi lapangan</td></tr>
+        <tr><td>status</td><td>TEXT</td><td>CHECK(active/maintenance)</td><td>Status operasional lapangan</td></tr>
+        <tr><td>created_at</td><td>DATETIME</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>Waktu data lapangan dibuat</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 3.5 Struktur Tabel <em>bookings</em></div>
+    <table>
+      <thead><tr><th>Field</th><th>Tipe Data</th><th>Constraint</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>INTEGER</td><td>PRIMARY KEY, AUTOINCREMENT</td><td>Identifikasi unik booking</td></tr>
+        <tr><td>user_id</td><td>INTEGER</td><td>FK → users(id) CASCADE</td><td>Pengguna yang memesan</td></tr>
+        <tr><td>field_id</td><td>INTEGER</td><td>FK → fields(id) CASCADE</td><td>Lapangan yang dipesan</td></tr>
+        <tr><td>booking_date</td><td>TEXT</td><td>NOT NULL</td><td>Tanggal penyewaan (YYYY-MM-DD)</td></tr>
+        <tr><td>start_time</td><td>INTEGER</td><td>NOT NULL</td><td>Jam mulai (integer, misal: 8 = 08:00)</td></tr>
+        <tr><td>end_time</td><td>INTEGER</td><td>NOT NULL</td><td>Jam selesai (integer, misal: 10 = 10:00)</td></tr>
+        <tr><td>total_price</td><td>INTEGER</td><td>NOT NULL</td><td>Total harga sewa (Rupiah)</td></tr>
+        <tr><td>status</td><td>TEXT</td><td>CHECK(pending/approved/cancelled)</td><td>Status persetujuan booking</td></tr>
+        <tr><td>created_at</td><td>DATETIME</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>Waktu booking dibuat</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 3.6 Struktur Tabel <em>transactions</em></div>
+    <table>
+      <thead><tr><th>Field</th><th>Tipe Data</th><th>Constraint</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td>id</td><td>INTEGER</td><td>PRIMARY KEY, AUTOINCREMENT</td><td>Identifikasi unik transaksi</td></tr>
+        <tr><td>booking_id</td><td>INTEGER</td><td>UNIQUE, FK → bookings(id) CASCADE</td><td>Booking terkait (1-to-1)</td></tr>
+        <tr><td>payment_method</td><td>TEXT</td><td>CHECK(cash/transfer)</td><td>Metode pembayaran</td></tr>
+        <tr><td>payment_status</td><td>TEXT</td><td>CHECK(unpaid/paid)</td><td>Status pembayaran</td></tr>
+        <tr><td>transaction_date</td><td>DATETIME</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>Waktu transaksi dibuat</td></tr>
+        <tr><td>created_at</td><td>DATETIME</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>Waktu rekam transaksi</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Relasi antar tabel menggunakan <em>foreign key constraint</em> dengan opsi <code>ON DELETE CASCADE</code>, yang berarti ketika sebuah data pengguna atau lapangan dihapus, seluruh data booking dan transaksi terkait akan ikut terhapus secara otomatis untuk menjaga integritas referensial database.</p>
+
+  <div class="section-heading">3.5 Perancangan Antarmuka Pengguna</div>
+  <p>Perancangan antarmuka pengguna (UI) menggunakan pendekatan <em>Single Page Application</em> (SPA) di mana semua tampilan (halaman beranda, cek jadwal, login, registrasi, dashboard penyewa, dan panel admin) berada dalam satu file HTML dan beralih secara dinamis menggunakan JavaScript tanpa me-reload halaman.</p>
+  <p>Desain antarmuka menggunakan tema gelap (dark theme) dengan aksen warna hijau neon dan efek glassmorphism untuk memberikan kesan modern, premium, dan sporty yang sesuai dengan konteks fasilitas olahraga. Tata letak menggunakan sistem grid CSS yang responsif, memastikan tampilan yang optimal baik pada layar desktop maupun perangkat mobile.</p>
+  <p>Navigasi utama terdiri dari: Beranda, Cek Jadwal, Dashboard (Penyewa atau Admin tergantung peran), dan tombol Login/Daftar. Pada perangkat mobile, navigasi berubah menjadi hamburger menu untuk menghemat ruang layar.</p>
+
+  <div class="section-heading">3.6 Implementasi Sistem</div>
+  <p>Implementasi sistem dilakukan menggunakan stack teknologi berikut:</p>
+  <ul>
+    <li><strong>Runtime Server:</strong> Node.js v18.x</li>
+    <li><strong>Framework Backend:</strong> Express.js v4.x</li>
+    <li><strong>Database:</strong> SQLite (via node-sqlite3)</li>
+    <li><strong>Keamanan:</strong> bcryptjs (hashing password), express-session (manajemen sesi)</li>
+    <li><strong>Frontend:</strong> HTML5, CSS3, JavaScript (Vanilla — tanpa framework)</li>
+    <li><strong>Ikon:</strong> Font Awesome 6.4.0</li>
+    <li><strong>Tipografi:</strong> Google Fonts (Outfit, Plus Jakarta Sans)</li>
+  </ul>
+
+  <p>Arsitektur sistem menggunakan model Client-Server dengan REST API sebagai penghubung antara frontend dan backend. Frontend berkomunikasi dengan backend melalui HTTP requests ke endpoint-endpoint API yang telah didefinisikan.</p>
+
+  <div class="fig-wrapper">
+    <div style="border: 1px solid #333; padding: 10mm; background: #fafafa; font-size: 10pt; text-align: center;">
+      <strong style="display:block; text-align:center; margin-bottom: 4mm;">[ Arsitektur Sistem ]</strong>
+      <table style="border: none; width: 100%; text-align: center; font-size: 10pt;">
+        <tr>
+          <td style="border: 2px solid #000; padding: 4mm; background: #e8f5e9; width: 28%;">
+            <strong>BROWSER<br>(Client)</strong><br>
+            <span style="font-size: 9pt;">HTML5 + CSS3<br>JavaScript SPA<br>Fetch API</span>
+          </td>
+          <td style="border: none; font-size: 12pt; padding: 2mm;">
+            HTTP Request<br>⟶ ⟶ ⟶<br>⟵ ⟵ ⟵<br>JSON Response
+          </td>
+          <td style="border: 2px solid #000; padding: 4mm; background: #e3f2fd; width: 28%;">
+            <strong>NODE.JS SERVER<br>(Backend)</strong><br>
+            <span style="font-size: 9pt;">Express.js<br>REST API<br>Session Auth<br>bcryptjs</span>
+          </td>
+          <td style="border: none; font-size: 12pt; padding: 2mm;">
+            SQL Query<br>⟶ ⟶ ⟶<br>⟵ ⟵ ⟵<br>Result Set
+          </td>
+          <td style="border: 2px solid #000; padding: 4mm; background: #fff3e0; width: 28%;">
+            <strong>SQLITE<br>(Database)</strong><br>
+            <span style="font-size: 9pt;">users<br>fields<br>bookings<br>transactions</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="fig-caption">Gambar 3.3 Arsitektur Sistem Client–Server</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BAB IV — HASIL DAN PEMBAHASAN                               -->
+<!-- ============================================================ -->
+<div class="page" id="bab4">
+  <div class="chapter-title">BAB IV<br>HASIL DAN PEMBAHASAN</div>
+
+  <div class="section-heading">4.1 Hasil Implementasi Sistem</div>
+  <p>Sistem Informasi Penyewaan Lapangan MiniSoccer Polinela telah berhasil diimplementasikan dan dijalankan sebagai aplikasi web berbasis Node.js yang dapat diakses melalui browser pada alamat <code>http://localhost:3000</code>. Sistem ini terdiri dari 779 baris kode backend (server.js), 1.803 baris CSS (style.css), 1.576 baris JavaScript frontend (app.js), dan 818 baris HTML (index.html).</p>
+
+  <p>Berikut adalah daftar lengkap endpoint REST API yang telah diimplementasikan:</p>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 4.1 Daftar Endpoint REST API Sistem</div>
+    <table>
+      <thead>
+        <tr><th>Method</th><th>Endpoint</th><th>Akses</th><th>Keterangan</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="center">POST</td><td>/api/auth/register</td><td>Publik</td><td>Registrasi pengguna baru</td></tr>
+        <tr><td class="center">POST</td><td>/api/auth/login</td><td>Publik</td><td>Login ke sistem</td></tr>
+        <tr><td class="center">POST</td><td>/api/auth/logout</td><td>Login</td><td>Logout dari sistem</td></tr>
+        <tr><td class="center">GET</td><td>/api/auth/me</td><td>Publik</td><td>Cek status sesi aktif</td></tr>
+        <tr><td class="center">GET</td><td>/api/fields</td><td>Publik</td><td>Daftar semua lapangan</td></tr>
+        <tr><td class="center">POST</td><td>/api/fields</td><td>Admin</td><td>Tambah lapangan baru</td></tr>
+        <tr><td class="center">PUT</td><td>/api/fields/:id</td><td>Admin</td><td>Edit data lapangan</td></tr>
+        <tr><td class="center">DELETE</td><td>/api/fields/:id</td><td>Admin</td><td>Hapus lapangan</td></tr>
+        <tr><td class="center">GET</td><td>/api/bookings/check-availability</td><td>Publik</td><td>Cek slot jadwal tersedia</td></tr>
+        <tr><td class="center">POST</td><td>/api/bookings</td><td>Login</td><td>Buat booking baru</td></tr>
+        <tr><td class="center">GET</td><td>/api/bookings/my</td><td>Login</td><td>Riwayat booking penyewa</td></tr>
+        <tr><td class="center">PUT</td><td>/api/bookings/:id</td><td>Login/Admin</td><td>Reschedule booking</td></tr>
+        <tr><td class="center">PUT</td><td>/api/bookings/:id/cancel</td><td>Login</td><td>Batalkan booking pending</td></tr>
+        <tr><td class="center">GET</td><td>/api/bookings/all</td><td>Admin</td><td>Semua booking dengan filter</td></tr>
+        <tr><td class="center">PUT</td><td>/api/bookings/:id/status</td><td>Admin</td><td>Approve/Cancel booking</td></tr>
+        <tr><td class="center">PUT</td><td>/api/bookings/:id/payment</td><td>Admin</td><td>Tandai lunas/belum bayar</td></tr>
+        <tr><td class="center">DELETE</td><td>/api/bookings/:id</td><td>Admin</td><td>Hapus booking permanen</td></tr>
+        <tr><td class="center">GET</td><td>/api/users</td><td>Admin</td><td>Daftar semua pengguna</td></tr>
+        <tr><td class="center">POST</td><td>/api/users</td><td>Admin</td><td>Tambah akun pengguna</td></tr>
+        <tr><td class="center">PUT</td><td>/api/users/:id</td><td>Admin</td><td>Edit data pengguna</td></tr>
+        <tr><td class="center">DELETE</td><td>/api/users/:id</td><td>Admin</td><td>Hapus akun pengguna</td></tr>
+        <tr><td class="center">GET</td><td>/api/reports/summary</td><td>Admin</td><td>Laporan &amp; statistik keuangan</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-heading">4.2 Tampilan Antarmuka Sistem</div>
+
+  <div class="sub-heading">4.2.1 Halaman Beranda (Landing Page)</div>
+  <p>Halaman beranda merupakan halaman pertama yang dilihat pengguna ketika mengakses sistem. Halaman ini menampilkan informasi umum tentang sistem, kartu lapangan yang tersedia beserta harga sewa, serta tombol untuk melakukan booking atau mengecek jadwal. Desain menggunakan tema gelap dengan aksen hijau neon dan ilustrasi lapangan minisoccer yang dibuat secara animasi menggunakan CSS.</p>
+
+  <div class="fig-wrapper">
+    <div style="border: 2px solid #ccc; padding: 4mm; background: #f9f9f9;">
+      <div style="background: #0a0f1e; color: #fff; padding: 8mm; border-radius: 4px; font-family: Arial, sans-serif; font-size: 10pt;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 4mm; border-bottom: 1px solid #333; margin-bottom: 5mm;">
+          <div style="color: #4ade80; font-weight: bold; font-size: 12pt;">⚽ POLINELA SOCCER</div>
+          <div style="display:flex; gap: 8px; font-size: 9pt;">
+            <span style="color: #4ade80;">🏠 Beranda</span>
+            <span>📅 Cek Jadwal</span>
+            <span style="background: #4ade80; color: #000; padding: 2px 8px; border-radius: 4px;">→ Masuk</span>
+            <span style="background: #4ade80; color: #000; padding: 2px 8px; border-radius: 4px; font-weight:bold;">Daftar</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8mm; align-items: center;">
+          <div style="flex: 1;">
+            <div style="background: #4ade8033; color: #4ade80; font-size: 8pt; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 3mm;">SISTEM BOOKING MODERN</div>
+            <div style="font-size: 18pt; font-weight: bold; line-height: 1.3;">Sewa Lapangan<br><span style="color: #4ade80;">Minisoccer Polinela</span></div>
+            <div style="font-size: 9pt; color: #aaa; margin: 3mm 0;">Rasakan pengalaman olahraga terbaik dengan fasilitas lapangan standar FIFA di Politeknik Negeri Lampung.</div>
+            <div style="display: flex; gap: 6px;">
+              <span style="background: #4ade80; color: #000; padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 9pt;">📅 Booking Sekarang</span>
+              <span style="border: 1px solid #4ade80; color: #4ade80; padding: 4px 12px; border-radius: 6px; font-size: 9pt;">🔍 Cek Jadwal Hari Ini</span>
+            </div>
+          </div>
+          <div style="width: 100px; height: 70px; background: #1a472a; border: 2px solid #4ade80; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 24pt;">⚽</div>
+        </div>
+      </div>
+    </div>
+    <div class="fig-caption">Gambar 4.1 Tampilan Halaman Beranda (Landing Page)</div>
+  </div>
+
+  <div class="sub-heading">4.2.2 Halaman Cek Jadwal Lapangan</div>
+  <p>Halaman cek jadwal menampilkan slot waktu operasional lapangan dari pukul 08:00 hingga 23:00 dalam format grid visual. Pengguna dapat memilih tanggal dan lapangan yang ingin dicek, kemudian sistem akan menampilkan slot mana yang tersedia (hijau) dan mana yang sudah terisi (merah). Data ketersediaan diambil secara real-time dari database melalui endpoint <code>GET /api/bookings/check-availability</code>.</p>
+
+  <div class="fig-wrapper">
+    <div style="border: 2px solid #ccc; padding: 4mm; background: #f9f9f9;">
+      <div style="background: #0a0f1e; color: #fff; padding: 8mm; border-radius: 4px; font-family: Arial, sans-serif; font-size: 10pt;">
+        <div style="border: 1px solid #1a3a1a; background: #0f1f0f; padding: 6mm; border-radius: 8px;">
+          <div style="color: #4ade80; font-weight: bold; margin-bottom: 3mm;">⏱ Slot Jadwal Lapangan &nbsp;&nbsp;&nbsp;&nbsp; <span style="float:right; font-size:9pt;"><span style="background:#4ade8033; padding: 2px 6px; border-radius:3px; margin-right: 4px;">✓ Tersedia</span><span style="background:#ff444433; padding: 2px 6px; border-radius:3px;">✗ Terisi</span></span></div>
+          <div style="display:grid; grid-template-columns: repeat(6,1fr); gap: 4px; font-size: 8pt;">
+            <div style="background:#4ade8022; border:1px solid #4ade80; padding:4px; border-radius:4px; text-align:center;">08:00-09:00<br><span style="color:#4ade80">✓ Tersedia</span></div>
+            <div style="background:#4ade8022; border:1px solid #4ade80; padding:4px; border-radius:4px; text-align:center;">09:00-10:00<br><span style="color:#4ade80">✓ Tersedia</span></div>
+            <div style="background:#ff444422; border:1px solid #f44; padding:4px; border-radius:4px; text-align:center;">10:00-11:00<br><span style="color:#f66">✗ Terisi</span></div>
+            <div style="background:#4ade8022; border:1px solid #4ade80; padding:4px; border-radius:4px; text-align:center;">11:00-12:00<br><span style="color:#4ade80">✓ Tersedia</span></div>
+            <div style="background:#ff444422; border:1px solid #f44; padding:4px; border-radius:4px; text-align:center;">12:00-13:00<br><span style="color:#f66">✗ Terisi</span></div>
+            <div style="background:#4ade8022; border:1px solid #4ade80; padding:4px; border-radius:4px; text-align:center;">13:00-14:00<br><span style="color:#4ade80">✓ Tersedia</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fig-caption">Gambar 4.2 Halaman Cek Jadwal Lapangan (Real-Time)</div>
+  </div>
+
+  <div class="sub-heading">4.2.3 Halaman Login dan Registrasi</div>
+  <p>Halaman login memungkinkan pengguna yang sudah terdaftar untuk masuk ke dalam sistem menggunakan username dan password. Halaman registrasi menyediakan form untuk mendaftar akun baru dengan kategori pengguna yang dapat dipilih (mahasiswa, dosen, atau umum). Field identitas (NIM, NIP, atau KTP) berubah secara dinamis sesuai kategori yang dipilih. Validasi dilakukan baik di sisi client maupun server untuk memastikan data yang masuk valid dan aman.</p>
+
+  <div class="sub-heading">4.2.4 Dashboard Penyewa</div>
+  <p>Dashboard penyewa menampilkan statistik ringkasan booking (total booking, jumlah booking pending, dan jumlah booking disetujui), form pengajuan penyewaan baru dengan kalkulator harga otomatis, serta tabel riwayat booking lengkap dengan opsi reschedule, pembatalan, dan pencetakan kuitansi digital.</p>
+
+  <div class="fig-wrapper">
+    <div style="border: 2px solid #ccc; padding: 4mm; background: #f9f9f9;">
+      <div style="background: #0a0f1e; color: #fff; padding: 8mm; border-radius: 4px; font-family: Arial, sans-serif; font-size: 9pt;">
+        <div style="display:flex; gap: 5mm;">
+          <div style="background: #111827; border-radius: 8px; padding: 5mm; flex: 1;">
+            <div style="color: #4ade80; font-weight:bold; margin-bottom: 3mm;">📊 Statistik Booking Saya</div>
+            <div style="display:flex; gap:4mm;">
+              <div style="background: #0f2a1a; border: 1px solid #4ade80; border-radius:6px; padding: 3mm; flex:1; text-align:center;"><div style="font-size:16pt; font-weight:bold;">3</div><div style="color:#aaa; font-size:8pt;">Total Booking</div></div>
+              <div style="background: #2a1a0f; border: 1px solid #f59e0b; border-radius:6px; padding: 3mm; flex:1; text-align:center;"><div style="font-size:16pt; font-weight:bold; color:#f59e0b;">1</div><div style="color:#aaa; font-size:8pt;">Pending</div></div>
+              <div style="background: #0f2a0f; border: 1px solid #22c55e; border-radius:6px; padding: 3mm; flex:1; text-align:center;"><div style="font-size:16pt; font-weight:bold; color:#22c55e;">2</div><div style="color:#aaa; font-size:8pt;">Disetujui</div></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 4mm; background: #111827; border-radius: 8px; padding: 5mm;">
+          <div style="color: #4ade80; font-weight:bold; margin-bottom: 2mm;">📋 Riwayat Penyewaan</div>
+          <table style="width:100%; font-size: 8pt; border-collapse: collapse;">
+            <tr style="background:#1f2937; color: #aaa;"><th style="border:none; padding: 2mm; text-align:left;">ID</th><th style="border:none; padding:2mm;">Lapangan</th><th style="border:none; padding:2mm;">Tanggal</th><th style="border:none; padding:2mm;">Total</th><th style="border:none; padding:2mm;">Status</th></tr>
+            <tr><td style="border:none; padding: 2mm;">#MS-1</td><td style="border:none; padding:2mm;">Lapangan A</td><td style="border:none; padding:2mm;">25 Jun 2026 09:00-11:00</td><td style="border:none; padding:2mm;">Rp300.000</td><td style="border:none; padding:2mm;"><span style="background:#16a34a; padding:1px 6px; border-radius:3px;">APPROVED</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="fig-caption">Gambar 4.4 Dashboard Penyewa</div>
+  </div>
+
+  <div class="sub-heading">4.2.5 Panel Administrator</div>
+  <p>Panel administrator terdiri dari empat tab navigasi yaitu: (1) <strong>Kelola Booking</strong> — mengelola seluruh data pemesanan, menyetujui atau membatalkan booking, mengonfirmasi pembayaran, serta melakukan reschedule dan hapus permanen; (2) <strong>Kelola Lapangan</strong> — CRUD penuh untuk data lapangan termasuk nama, tipe, harga per jam, deskripsi, dan status operasional; (3) <strong>Kelola Pengguna</strong> — CRUD penuh untuk akun pengguna termasuk tambah, edit, dan hapus akun; serta (4) <strong>Laporan Keuangan</strong> — menampilkan ringkasan pendapatan, statistik booking per kategori pengguna dan per lapangan, jurnal transaksi lengkap, dan tombol cetak PDF.</p>
+
+  <div class="section-heading">4.3 Pengujian Sistem</div>
+  <p>Pengujian sistem dilakukan menggunakan metode <em>Black-Box Testing</em>, yaitu metode pengujian yang berfokus pada fungsionalitas sistem dari perspektif pengguna tanpa memperhatikan implementasi internal. Setiap skenario pengujian dievaluasi berdasarkan kesesuaian antara hasil yang diharapkan dengan hasil yang sebenarnya diperoleh.</p>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 4.2 Skenario Pengujian Black-Box — Autentikasi</div>
+    <table>
+      <thead>
+        <tr><th>No</th><th>Skenario Uji</th><th>Input</th><th>Hasil yang Diharapkan</th><th>Hasil Aktual</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="center">1</td>
+          <td>Login dengan kredensial valid</td>
+          <td>username: admin, password: admin123</td>
+          <td>Berhasil login, redirect ke Panel Admin</td>
+          <td>Login berhasil, diarahkan ke Panel Admin</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">2</td>
+          <td>Login dengan password salah</td>
+          <td>username: admin, password: salah123</td>
+          <td>Tampil pesan "Username atau password salah"</td>
+          <td>Pesan error tampil, tidak bisa masuk</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">3</td>
+          <td>Registrasi pengguna baru</td>
+          <td>Data mahasiswa lengkap dengan NIM</td>
+          <td>Akun berhasil dibuat, bisa login</td>
+          <td>Registrasi sukses dan login berhasil</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">4</td>
+          <td>Registrasi dengan username yang sudah ada</td>
+          <td>username: admin (sudah ada)</td>
+          <td>Tampil pesan "Username sudah digunakan"</td>
+          <td>Pesan error tampil, registrasi gagal</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">5</td>
+          <td>Logout dari sistem</td>
+          <td>Klik tombol "Keluar"</td>
+          <td>Sesi berakhir, kembali ke halaman publik</td>
+          <td>Logout berhasil, sesi terhapus</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 4.3 Skenario Pengujian Black-Box — Pemesanan (Booking)</div>
+    <table>
+      <thead>
+        <tr><th>No</th><th>Skenario Uji</th><th>Input</th><th>Hasil yang Diharapkan</th><th>Hasil Aktual</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="center">6</td>
+          <td>Cek jadwal lapangan</td>
+          <td>Lapangan A, tanggal 25 Juni 2026</td>
+          <td>Slot tersedia dan terisi ditampilkan</td>
+          <td>Grid slot ditampilkan dengan benar</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">7</td>
+          <td>Booking lapangan dengan slot tersedia</td>
+          <td>Lapangan A, 25 Jun, 09:00–11:00</td>
+          <td>Booking berhasil, total Rp 300.000</td>
+          <td>Booking ID #MS-1 berhasil dibuat</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">8</td>
+          <td>Booking pada slot yang sudah terisi (anti-overlap)</td>
+          <td>Lapangan A, 25 Jun, 09:00–11:00 (sudah ada)</td>
+          <td>Tampil pesan "Jadwal sudah terisi"</td>
+          <td>Sistem menolak booking, pesan error tampil</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">9</td>
+          <td>Reschedule booking pending</td>
+          <td>Ubah waktu booking ke 14:00–16:00</td>
+          <td>Jadwal booking berhasil diubah</td>
+          <td>Jadwal berhasil diperbarui</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">10</td>
+          <td>Batalkan booking pending</td>
+          <td>Klik batalkan pada booking berstatus pending</td>
+          <td>Status booking berubah menjadi cancelled</td>
+          <td>Booking berhasil dibatalkan</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">11</td>
+          <td>Cetak kuitansi digital</td>
+          <td>Klik cetak pada booking approved</td>
+          <td>Modal kuitansi ditampilkan dengan data lengkap</td>
+          <td>Kuitansi tampil dengan data lengkap</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tbl-wrapper">
+    <div class="tbl-caption">Tabel 4.4 Skenario Pengujian Black-Box — Panel Administrator</div>
+    <table>
+      <thead>
+        <tr><th>No</th><th>Skenario Uji</th><th>Input</th><th>Hasil yang Diharapkan</th><th>Hasil Aktual</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="center">12</td>
+          <td>Admin menyetujui booking</td>
+          <td>Klik "Setujui" pada booking pending</td>
+          <td>Status booking berubah menjadi approved</td>
+          <td>Status berhasil diubah ke approved</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">13</td>
+          <td>Admin konfirmasi pembayaran lunas</td>
+          <td>Klik "Lunas" pada booking approved</td>
+          <td>Status pembayaran berubah menjadi PAID</td>
+          <td>Payment status berhasil diperbarui ke paid</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">14</td>
+          <td>Admin tambah lapangan baru</td>
+          <td>Data lapangan baru (nama, tipe, harga)</td>
+          <td>Lapangan baru berhasil ditambahkan</td>
+          <td>Lapangan berhasil ditambah dan tampil di daftar</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">15</td>
+          <td>Admin edit harga lapangan</td>
+          <td>Ubah harga dari Rp150.000 menjadi Rp160.000</td>
+          <td>Harga berhasil diperbarui di database</td>
+          <td>Harga berhasil diubah menjadi Rp160.000/jam</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">16</td>
+          <td>Admin tambah akun pengguna baru</td>
+          <td>Data pengguna baru kategori mahasiswa</td>
+          <td>Akun baru berhasil dibuat dan dapat login</td>
+          <td>Akun berhasil dibuat dan dapat digunakan</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">17</td>
+          <td>Admin melihat laporan keuangan</td>
+          <td>Akses tab Laporan Keuangan</td>
+          <td>Pendapatan, statistik, dan jurnal tampil</td>
+          <td>Revenue=Rp300.000, booking disetujui=1 tampil</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+        <tr>
+          <td class="center">18</td>
+          <td>Akses panel admin tanpa login</td>
+          <td>Akses /api/bookings/all tanpa sesi</td>
+          <td>HTTP 403 Forbidden, akses ditolak</td>
+          <td>Server mengembalikan 403 dengan pesan error</td>
+          <td class="center" style="color:#16a34a; font-weight:bold;">✓ Lulus</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Dari keseluruhan 18 skenario pengujian yang dilakukan, seluruhnya menghasilkan output yang sesuai dengan hasil yang diharapkan. Dengan demikian, tingkat keberhasilan pengujian adalah <strong>100% (18/18 skenario lulus)</strong>.</p>
+
+  <div class="section-heading">4.4 Pembahasan</div>
+
+  <div class="sub-heading">4.4.1 Kesesuaian dengan Kebutuhan Fungsional</div>
+  <p>Seluruh kebutuhan fungsional yang telah didefinisikan pada Bab III (KF-01 hingga KF-12) telah berhasil diimplementasikan dan diverifikasi melalui pengujian Black-Box Testing. Sistem mampu menangani seluruh operasi CRUD untuk tiga entitas utama (pengguna, lapangan, dan booking), serta menghasilkan laporan keuangan yang akurat berdasarkan data transaksi yang tersimpan di database.</p>
+
+  <div class="sub-heading">4.4.2 Pencegahan Konflik Jadwal (Anti-Overlap)</div>
+  <p>Salah satu fitur kritis dalam sistem ini adalah pencegahan konflik jadwal (double booking). Implementasinya dilakukan di sisi server dengan menggunakan query SQL yang memeriksa overlap interval waktu:</p>
+  <div class="code-block">SELECT id FROM bookings
+WHERE field_id = ? AND booking_date = ?
+  AND status != 'cancelled'
+  AND NOT (end_time &lt;= ? OR start_time &gt;= ?)
+-- Parameter: (field_id, booking_date, requested_start, requested_end)</div>
+  <p>Query ini menggunakan logika negasi overlap: dua interval waktu [A, B] dan [C, D] tidak saling tumpang tindih jika dan hanya jika B ≤ C atau D ≤ A. Dengan membalikkan kondisi ini, sistem mendeteksi setiap potensi konflik dan menolak booking yang saling bertabrakan. Hal ini memastikan integritas data jadwal terjaga sepenuhnya.</p>
+
+  <div class="sub-heading">4.4.3 Keamanan Sistem</div>
+  <p>Keamanan sistem diimplementasikan melalui beberapa lapisan. Pertama, password pengguna tidak disimpan dalam bentuk plaintext, melainkan di-hash menggunakan algoritma bcryptjs dengan salt rounds = 10. Kedua, autentikasi menggunakan session-based mechanism dengan cookie bertahan 24 jam, yang memisahkan akses pengguna biasa dan administrator melalui middleware <code>requireLogin</code> dan <code>requireAdmin</code>. Ketiga, seluruh input dari pengguna divalidasi di sisi server untuk mencegah injeksi SQL dan data tidak valid.</p>
+
+  <div class="sub-heading">4.4.4 Responsivitas Antarmuka</div>
+  <p>Antarmuka pengguna dirancang dengan pendekatan <em>responsive design</em> menggunakan CSS media queries. Sistem mendukung tiga breakpoint utama: desktop (&gt;992px), tablet/small desktop (≤992px), dan mobile (≤768px dan ≤480px). Pada tampilan mobile, navigasi beralih menjadi hamburger menu, layout berubah dari multi-kolom menjadi single-kolom, dan ukuran font disesuaikan untuk keterbacaan optimal di layar kecil.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- BAB V — PENUTUP                                             -->
+<!-- ============================================================ -->
+<div class="page" id="bab5">
+  <div class="chapter-title">BAB V<br>PENUTUP</div>
+
+  <div class="section-heading">5.1 Kesimpulan</div>
+  <p>Berdasarkan hasil penelitian, perancangan, implementasi, dan pengujian yang telah dilakukan, dapat ditarik beberapa kesimpulan sebagai berikut:</p>
+  <ol>
+    <li>
+      <strong>Sistem Informasi Penyewaan Lapangan MiniSoccer Polinela telah berhasil dibangun dan diimplementasikan.</strong> Sistem berbasis web ini menggunakan Node.js/Express.js sebagai backend, SQLite sebagai database relasional, dan HTML5/CSS3/JavaScript vanilla sebagai frontend dalam arsitektur Single Page Application (SPA). Sistem dapat diakses melalui browser pada alamat <code>http://localhost:3000</code>.
+    </li>
+    <li>
+      <strong>Database relasional berhasil dirancang dan diimplementasikan</strong> menggunakan empat tabel yang saling berhubungan melalui foreign key: <em>users</em>, <em>fields</em>, <em>bookings</em>, dan <em>transactions</em>. Desain database mengikuti prinsip normalisasi 3NF dengan integritas referensial yang terjaga melalui constraint <code>ON DELETE CASCADE</code>.
+    </li>
+    <li>
+      <strong>Pengecekan ketersediaan jadwal lapangan berfungsi secara real-time</strong> dan mampu mendeteksi serta mencegah konflik jadwal (double booking) menggunakan algoritma pendeteksian overlap interval waktu yang diimplementasikan dalam query SQL.
+    </li>
+    <li>
+      <strong>Sistem berhasil menghasilkan laporan keuangan</strong> yang mencakup total pendapatan, klasifikasi booking berdasarkan kategori pengguna (mahasiswa, dosen, umum) dan lapangan, serta jurnal transaksi lengkap yang dapat dicetak dalam format PDF melalui browser.
+    </li>
+    <li>
+      <strong>Seluruh 18 skenario pengujian Black-Box Testing menghasilkan output yang sesuai</strong> dengan hasil yang diharapkan, dengan tingkat keberhasilan 100%. Hal ini membuktikan bahwa sistem berfungsi dengan baik sesuai dengan seluruh kebutuhan fungsional yang telah didefinisikan.
+    </li>
+    <li>
+      <strong>Antarmuka pengguna responsif</strong> dan dapat menyesuaikan tampilan untuk berbagai ukuran layar, mulai dari desktop hingga perangkat mobile, sehingga dapat diakses dengan nyaman melalui HP maupun komputer.
+    </li>
+  </ol>
+
+  <div class="section-heading">5.2 Saran</div>
+  <p>Untuk pengembangan sistem lebih lanjut, beberapa saran yang dapat dipertimbangkan adalah sebagai berikut:</p>
+  <ol>
+    <li>
+      <strong>Integrasi Payment Gateway.</strong> Sistem saat ini hanya mendukung pencatatan pembayaran secara manual oleh admin. Ke depannya, sistem dapat diintegrasikan dengan layanan pembayaran online seperti Midtrans, DOKU, atau GoPay untuk memungkinkan pembayaran digital secara langsung oleh pengguna.
+    </li>
+    <li>
+      <strong>Notifikasi Otomatis.</strong> Sistem dapat ditingkatkan dengan fitur notifikasi otomatis melalui WhatsApp (menggunakan WhatsApp Business API) atau email (menggunakan Nodemailer) untuk memberitahu pengguna ketika status booking mereka berubah.
+    </li>
+    <li>
+      <strong>Pengembangan Aplikasi Mobile.</strong> Untuk meningkatkan kemudahan akses, sistem dapat dikembangkan menjadi aplikasi mobile native berbasis Android atau iOS, atau menggunakan teknologi Progressive Web App (PWA) yang memungkinkan instalasi di smartphone.
+    </li>
+    <li>
+      <strong>Migrasi ke Database Server.</strong> Seiring dengan peningkatan jumlah pengguna dan data, SQLite sebaiknya diganti dengan database server seperti MySQL atau PostgreSQL yang lebih handal untuk multi-user concurrent access dalam lingkungan produksi.
+    </li>
+    <li>
+      <strong>Integrasi dengan Sistem Akademik Polinela.</strong> Sistem dapat diintegrasikan dengan sistem informasi akademik Polinela (SIAKAD) untuk memverifikasi status aktif mahasiswa/dosen secara otomatis tanpa perlu input manual.
+    </li>
+    <li>
+      <strong>Penambahan Fitur Ulasan dan Rating.</strong> Penambahan fitur ulasan dan penilaian lapangan oleh pengguna dapat membantu pengelola dalam memantau kepuasan pengguna dan merencanakan perawatan fasilitas.
+    </li>
+    <li>
+      <strong>Implementasi Penjadwalan Pemeliharaan.</strong> Fitur kalender pemeliharaan lapangan dapat ditambahkan sehingga admin dapat menjadwalkan waktu maintenance dan sistem secara otomatis menandai slot tersebut sebagai tidak tersedia.
+    </li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAFTAR PUSTAKA                                               -->
+<!-- ============================================================ -->
+<div class="page" id="dafpus">
+  <div class="chapter-title">DAFTAR PUSTAKA</div>
+  <br>
+
+  <p class="no-indent">Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM, 13</em>(6), 377–387. https://doi.org/10.1145/362384.362685</p>
+
+  <p class="no-indent">Connolly, T., &amp; Begg, C. (2015). <em>Database Systems: A Practical Approach to Design, Implementation, and Management</em> (6th ed.). Pearson Education.</p>
+
+  <p class="no-indent">Express.js. (2023). <em>Express — Node.js web application framework</em>. https://expressjs.com/</p>
+
+  <p class="no-indent">Fielding, R. T. (2000). <em>Architectural styles and the design of network-based software architectures</em> (Doctoral dissertation). University of California, Irvine. https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm</p>
+
+  <p class="no-indent">Jogiyanto, H. M. (2005). <em>Analisis &amp; Desain Sistem Informasi: Pendekatan Terstruktur Teori dan Praktek Aplikasi Bisnis</em>. Andi Offset.</p>
+
+  <p class="no-indent">Kadir, A. (2014). <em>Pengenalan Sistem Informasi</em> (Edisi Revisi). Andi Offset.</p>
+
+  <p class="no-indent">Kurniawan, D. (2023). Penerapan REST API pada Sistem Manajemen Fasilitas Olahraga Kampus. <em>Jurnal Teknologi Informasi dan Komunikasi, 11</em>(2), 45–58.</p>
+
+  <p class="no-indent">Ladjamudin, A. B. (2013). <em>Analisis dan Desain Sistem Informasi</em>. Graha Ilmu.</p>
+
+  <p class="no-indent">Node.js Foundation. (2023). <em>Node.js Documentation</em>. https://nodejs.org/en/docs/</p>
+
+  <p class="no-indent">O'Brien, J. A., &amp; Marakas, G. M. (2011). <em>Management Information Systems</em> (10th ed.). McGraw-Hill.</p>
+
+  <p class="no-indent">Pratama, A. (2022). Sistem informasi penyewaan lapangan futsal berbasis web menggunakan PHP dan MySQL. <em>Jurnal Ilmiah Teknologi dan Informasi, 8</em>(1), 12–24.</p>
+
+  <p class="no-indent">Pressman, R. S. (2014). <em>Software Engineering: A Practitioner's Approach</em> (8th ed.). McGraw-Hill.</p>
+
+  <p class="no-indent">Rahayu, S., &amp; Nugroho, B. (2021). Rancang bangun aplikasi pemesanan lapangan olahraga berbasis android menggunakan Firebase Realtime Database. <em>Jurnal Rekayasa Perangkat Lunak, 5</em>(2), 89–102.</p>
+
+  <p class="no-indent">Sari, M., &amp; Hidayat, R. (2022). Sistem informasi booking lapangan berbasis database relasional dengan pendekatan agile. <em>Jurnal Sistem Informasi, 14</em>(3), 167–180.</p>
+
+  <p class="no-indent">SQLite. (2023). <em>SQLite Home Page</em>. https://www.sqlite.org/index.html</p>
+
+  <p class="no-indent">Sugiyono. (2016). <em>Metode Penelitian Kuantitatif, Kualitatif, dan R&amp;D</em>. Alfabeta.</p>
+
+  <p class="no-indent">Sommerville, I. (2016). <em>Software Engineering</em> (10th ed.). Pearson Education.</p>
+
+  <p class="no-indent">Sutabri, T. (2012). <em>Analisis Sistem Informasi</em>. Andi Offset.</p>
+
+  <p class="no-indent">Welling, L., &amp; Thomson, L. (2017). <em>PHP and MySQL Web Development</em> (5th ed.). Addison-Wesley Professional.</p>
+</div>
+
+</body>
+</html>
