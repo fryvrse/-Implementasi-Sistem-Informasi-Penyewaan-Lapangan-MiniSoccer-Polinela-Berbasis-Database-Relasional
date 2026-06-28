@@ -1,0 +1,16 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+# Redirect semua request /api/* ke serverless function
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+# Redirect semua halaman lain ke index.html (SPA)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -770,9 +770,15 @@ app.get('/api/reports/summary', requireAdmin, async (req, res) => {
 });
 
 
-// Start server after checking/initializing the database
-initDatabase().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server is running at http://localhost:${PORT}`);
+// Ekspor app dan initDatabase untuk digunakan oleh Netlify serverless function
+module.exports = { app, initDatabase };
+
+// Jalankan server hanya jika dieksekusi langsung (development lokal), bukan di Netlify
+if (require.main === module) {
+    initDatabase().then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running at http://localhost:${PORT}`);
+        });
     });
-});
+}
+
